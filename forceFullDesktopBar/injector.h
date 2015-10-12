@@ -6,7 +6,7 @@
 class Injector
 {
 public:
-    Injector();
+    Injector(const char *bootstrapPath);
     ~Injector();
 
     void inject(pid_t pid, const char* lib);

@@ -12,9 +12,9 @@
 #include <sys/proc_info.h>
 #include <libproc.h>
 
-Injector::Injector() : module(0), bootstrapfn(0)
+Injector::Injector(const char *bootstrapPath) : module(0), bootstrapfn(0)
 {
-    module = dlopen("bootstrap.dylib",
+    module = dlopen(bootstrapPath,
         RTLD_NOW | RTLD_LOCAL);
 
     printf("module: %p\n", module);
