@@ -12,6 +12,16 @@
 		775D43781BCC25E0002EDD8A /* dockInjection.m in Sources */ = {isa = PBXBuildFile; fileRef = 775D43771BCC25E0002EDD8A /* dockInjection.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		775D43801BCC2BA7002EDD8A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 775D435D1BCC256D002EDD8A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 775D43721BCC25E0002EDD8A;
+			remoteInfo = dockInjection;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		775D43631BCC256D002EDD8A /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -110,6 +120,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				775D43811BCC2BA7002EDD8A /* PBXTargetDependency */,
 			);
 			name = forceFullDesktopBar;
 			productName = forceFullDesktopBar;
@@ -186,6 +197,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		775D43811BCC2BA7002EDD8A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 775D43721BCC25E0002EDD8A /* dockInjection */;
+			targetProxy = 775D43801BCC2BA7002EDD8A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		775D436A1BCC256D002EDD8A /* Debug */ = {
@@ -327,6 +346,7 @@
 				775D437A1BCC25E0002EDD8A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
