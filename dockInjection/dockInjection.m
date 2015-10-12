@@ -23,29 +23,32 @@ void install(void) __attribute__ ((constructor));
 void install()
 {
     @autoreleasepool {
-        NSLog(@"testlib: install");
         SEL orig;
         id targetClass;
         IMP newMethod;
         Method origMethod;
         
+        NSLog(@"dockInjection: installed and running");
+        
         targetClass = NSClassFromString(@"WVExpose");
         
-        NSLog(@"targetClass: %p", targetClass);
-        
-        if (targetClass) {
-            orig = @selector(_missionControlSetupSpacesStripControllerForDisplay:showFullBar:);
-            newMethod = (IMP)swizzle_missionControlSetupSpacesStripControllerForDisplay;
-            
-            origMethod = class_getInstanceMethod(targetClass, orig);
-            
-            NSLog(@"origMethod: %p", origMethod);
-            
-            if (origMethod) {
-                originalMissionControlSetupSpacesStripControllerForDisplay = method_getImplementation(origMethod);
-                NSLog(@"originalMissionControlSetupSpacesStripControllerForDisplay: %p", originalMissionControlSetupSpacesStripControllerForDisplay);
-                method_setImplementation(origMethod, newMethod);
-            }
+        if (!targetClass) {
+            NSLog(@"Unable to find WVExpose class... cannot proceed");
+            return;
         }
+        
+        orig = @selector(_missionControlSetupSpacesStripControllerForDisplay:showFullBar:);
+        newMethod = (IMP)swizzle_missionControlSetupSpacesStripControllerForDisplay;
+        origMethod = class_getInstanceMethod(targetClass, orig);
+        
+        if (!origMethod) {
+            NSLog(@"Unable to find target method in WVExpose class... cannot proceed");
+            return;
+        }
+        
+        originalMissionControlSetupSpacesStripControllerForDisplay = method_getImplementation(origMethod);
+        method_setImplementation(origMethod, newMethod);
+        
+        NSLog(@"Successfully swizzled target method in WVExpose class");
     }
 }

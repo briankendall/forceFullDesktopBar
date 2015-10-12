@@ -13,6 +13,8 @@
 		775D43861BCC2CB7002EDD8A /* injector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 775D43821BCC2CB7002EDD8A /* injector.cpp */; settings = {ASSET_TAGS = (); }; };
 		775D43871BCC2CB7002EDD8A /* mach_inject.c in Sources */ = {isa = PBXBuildFile; fileRef = 775D43841BCC2CB7002EDD8A /* mach_inject.c */; settings = {ASSET_TAGS = (); }; };
 		776F390E1BCC2F9B00E01AD0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 776F390D1BCC2F9B00E01AD0 /* main.cpp */; settings = {ASSET_TAGS = (); }; };
+		776F39171BCC332D00E01AD0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 776F39161BCC332D00E01AD0 /* Foundation.framework */; };
+		776F39181BCC36B000E01AD0 /* processes.mm in Sources */ = {isa = PBXBuildFile; fileRef = 776F39111BCC31A800E01AD0 /* processes.mm */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +58,10 @@
 		775D43851BCC2CB7002EDD8A /* mach_inject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mach_inject.h; sourceTree = "<group>"; };
 		776F39081BCC2F6C00E01AD0 /* bootstrap.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = bootstrap.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		776F390D1BCC2F9B00E01AD0 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = bootstrap/main.cpp; sourceTree = "<group>"; };
+		776F39111BCC31A800E01AD0 /* processes.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = processes.mm; sourceTree = "<group>"; };
+		776F39131BCC32D400E01AD0 /* processes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = processes.h; sourceTree = "<group>"; };
+		776F39141BCC331D00E01AD0 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		776F39161BCC332D00E01AD0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				776F39171BCC332D00E01AD0 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,6 +93,8 @@
 		775D435C1BCC256D002EDD8A = {
 			isa = PBXGroup;
 			children = (
+				776F39161BCC332D00E01AD0 /* Foundation.framework */,
+				776F39141BCC331D00E01AD0 /* Cocoa.framework */,
 				775D43671BCC256D002EDD8A /* forceFullDesktopBar */,
 				775D43741BCC25E0002EDD8A /* dockInjection */,
 				776F390C1BCC2F8000E01AD0 /* bootstrap */,
@@ -110,6 +119,8 @@
 				775D43831BCC2CB7002EDD8A /* injector.h */,
 				775D43841BCC2CB7002EDD8A /* mach_inject.c */,
 				775D43851BCC2CB7002EDD8A /* mach_inject.h */,
+				776F39111BCC31A800E01AD0 /* processes.mm */,
+				776F39131BCC32D400E01AD0 /* processes.h */,
 				775D43681BCC256D002EDD8A /* main.mm */,
 			);
 			path = forceFullDesktopBar;
@@ -251,6 +262,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				775D43871BCC2CB7002EDD8A /* mach_inject.c in Sources */,
+				776F39181BCC36B000E01AD0 /* processes.mm in Sources */,
 				775D43691BCC256D002EDD8A /* main.mm in Sources */,
 				775D43861BCC2CB7002EDD8A /* injector.cpp in Sources */,
 			);
