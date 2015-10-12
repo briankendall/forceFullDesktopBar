@@ -151,6 +151,8 @@ int main(int argc, const char * argv[]) {
         }
         
         if ([arguments containsObject:@"-d"]) {
+            NSLog(@"Will continuously check for Dock processes...");
+            [worker findProcessesAndInjectAfterDelay:0];
             [NSTimer scheduledTimerWithTimeInterval:1.0 target:worker selector:@selector(doPeriodicCheck:) userInfo:nil repeats:YES];
             [[NSRunLoop currentRunLoop] run];
         } else {
