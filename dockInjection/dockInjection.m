@@ -14,8 +14,6 @@ IMP originalMissionControlSetupSpacesStripControllerForDisplay;
 
 void swizzle_missionControlSetupSpacesStripControllerForDisplay(id self, SEL _cmd, void *arg2, bool arg3)
 {
-    NSLog(@"Called swizzle_missionControlSetupSpacesStripControllerForDisplay!! arg2: %p, arg3: %d", arg2, arg3);
-    
     void (*originalFunction)(id, SEL, void *, bool) = (void (*)(id, SEL, void *, bool))originalMissionControlSetupSpacesStripControllerForDisplay;
     originalFunction(self, _cmd, arg2, true);
 }
