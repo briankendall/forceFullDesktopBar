@@ -9,10 +9,11 @@
 	<key>ProgramArguments</key>
 	<array>
 		<string>/usr/local/forceFullDesktopBar/forceFullDesktopBar</string>
+		<string>-d</string>
 	</array>
 	<key>RunAtLoad</key>
 	<true/>
-	<key>ProcessType></key>
+	<key>ProcessType</key>
 	<string>Interactive</string>
 </dict>
 </plist>
