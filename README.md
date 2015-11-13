@@ -15,8 +15,9 @@ This is accomplished by injecting code in the Dock process. Granted I'm not all 
   4. Reboot your system:
     * `reboot`
 2. Back in normal OS X, open Terminal.app
-3. Navigate to where you downloaded forceFullDesktopBar
+3. Navigate to where you downloaded the release of forceFullDesktopBar
   * `cd /path/to/forceFullDesktopBar`
+  * or, if you cloned the repo, navigate to forceFullDesktopBar/install
 4. Execute install.sh as root
   * `sudo ./install.sh`
   * Type in your administrator password when prompted.
