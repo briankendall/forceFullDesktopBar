@@ -121,7 +121,7 @@ int getInfoForAllProcesses(struct kinfo_proc **processInfo,
     mib[2] = KERN_PROC_ALL;
 
     /* Here we have a loop set up where we keep calling sysctl until we finally get an unrecoverable error
-    * (and we return) or we finally get a succesful result.  Note with how dynamic the process list can
+    * (and we return) or we finally get a successful result.  Note with how dynamic the process list can
     * be you can expect to have a failure here and there since the process list can change between
     * getting the size of buffer required and the actually filling that buffer.
     */
