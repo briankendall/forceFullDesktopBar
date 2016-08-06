@@ -8,7 +8,7 @@ This is accomplished by injecting code in the Dock process. Granted I'm not all 
 
 1. First, since this utility injects code into the Dock, you must first disable System Integrity Protection. However, it's not necessary to disable it completely — just the parts that prevent you from injecting code into Apple processes. It's not possible to do this when OS X is running normally; you'll have to reboot your computer into the Recovery Mode and disable it from there. Here's how to do it:
 
-  1. Boot into Recovery Mode: restart your Mac and hold Command+Option+R
+  1. Boot into Recovery Mode: restart your Mac and hold Command+R
   2. Once the main Recovery Mode window appears (i.e. OS X Utilities), open the Utilities menu and pick Terminal
   3. Type the following into the terminal window and press return:
     * `csrutil enable --without debug`
