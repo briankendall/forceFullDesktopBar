@@ -1,3 +1,9 @@
+### Note about macOS 10.12 Sierra:
+
+forceFullDesktopBar does not currently work with macOS Sierra. Though I am trying to figure out how to update it, there's a good chance I never will be able to. The Dock in 10.12 has been significantly rewritten in Swift, and the convenient Objective-C methods that were easy to extract from its binary and had clearly readable names and arguments are now gone, replaced with functions that have no symbol at all. While I'm sure it's possible to fix it, it would require extensive knowledge of reverse engineering and a whole lot of time, neither of which I currently have. Furthermore it would likely require using the much less reliable mach_override method, which is quite likely to break between minor system updates (like from 10.12 to 10.12.1) and when it breaks it will cause the Dock to crash.
+
+The best alternative in the meantime is probably to use BetterTouchTool, which has a feature where it can invoke Mission Control with the full spaces bar by posting some artificial mouse move events at the top of the screen. It's not perfect, but for some people it works. If in the future I come across a better method, I'll mention it here. And if I figure out how to fix forceFullDesktopBar, I definitely will.
+
 # Force Full Desktop Bar
 
 This is a utility for OS X 10.11 El Capitan that changes the behavior of Mission Control so that the desktop bar is always full size and showing previews of the desktops, just like it was in Yosemite and earlier. It's for users like myself who really hate that particular change Apple made in El Capitan and find that it constantly interrupts their workflow and causes much frustration.
