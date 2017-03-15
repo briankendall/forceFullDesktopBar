@@ -2,7 +2,7 @@
 
 forceFullDesktopBar does not currently work with macOS Sierra. Though I am trying to figure out how to update it, there's a good chance I never will be able to. The Dock in 10.12 has been significantly rewritten in Swift, and the convenient Objective-C methods that were easy to extract from its binary and had clearly readable names and arguments are now gone, replaced with functions that have no symbol at all. While I'm sure it's possible to fix it, it would require extensive knowledge of reverse engineering and a whole lot of time, neither of which I currently have. Furthermore it would likely require using the much less reliable mach_override method, which is quite likely to break between minor system updates (like from 10.12 to 10.12.1) and when it breaks it will cause the Dock to crash.
 
-The best alternative in the meantime is probably to use BetterTouchTool, which has a feature where it can invoke Mission Control with the full spaces bar by posting some artificial mouse move events at the top of the screen. It's not perfect, but for some people it works. If in the future I come across a better method, I'll mention it here. And if I figure out how to fix forceFullDesktopBar, I definitely will.
+The best alternative right now is to use another program of mine, [missionControlFullDesktopBar](https://github.com/briankendall/missionControlFullDesktopBar) in conjunction with a utility that lets you bind terminal commands to mouse buttons, keystrokes, or trackpad gestures like [BetterTouchTool](http://bettertouchtool.net). It's not as good of a solution but it gets the job done.
 
 # Force Full Desktop Bar
 
