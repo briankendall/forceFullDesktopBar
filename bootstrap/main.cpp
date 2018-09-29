@@ -16,7 +16,7 @@
 
 #define DLLEXPORT __attribute__((visibility("default")))
 
-extern "C" void __pthread_set_self(void*);
+extern "C" void _pthread_set_self(void*);
 
 extern "C" void bootstrap(ptrdiff_t offset, void *param, size_t psize, void *dummy) DLLEXPORT;
 
@@ -30,7 +30,7 @@ void *loaderThread(void *patch_bundle)
 
 void bootstrap(ptrdiff_t offset, void *param, size_t psize, void *dummy)
 {
-    __pthread_set_self(dummy);
+    _pthread_set_self(dummy);
 
     pthread_attr_t attr;
     pthread_attr_init(&attr); 
