@@ -9,7 +9,7 @@
 #ifndef processes_h
 #define processes_h
 
-NSSet * getAllPIDsForProcessName(const char *targetName);
-NSSet * getAllPIDsForProcessNameRunByUser(const char *targetName, uid_t targetUid);
+NSSet *getAllPIDsForProcessName(const char *targetName);
+NSSet *getAllPIDsForProcessNameRunByUser(const char *targetName, uid_t targetUid);
 
 #endif /* processes_h */

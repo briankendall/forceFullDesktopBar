@@ -3,21 +3,21 @@
 //   Some rights reserved: http://opensource.org/licenses/mit
 //   https://github.com/rentzsch/mach_inject
 
-#ifndef		_mach_inject_
-#define		_mach_inject_
+#ifndef _mach_inject_
+#define _mach_inject_
 
-#include <sys/types.h>
 #include <mach/error.h>
 #include <mach/vm_types.h>
 #include <stddef.h> // for ptrdiff_t
+#include <sys/types.h>
 
-#define	err_threadEntry_image_not_found			(err_local|1)
+#define err_threadEntry_image_not_found (err_local | 1)
 
-#define	INJECT_ENTRY		injectEntry
-#define	INJECT_ENTRY_SYMBOL	"injectEntry"
+#define INJECT_ENTRY injectEntry
+#define INJECT_ENTRY_SYMBOL "injectEntry"
 
-typedef	void	(*mach_inject_entry)( ptrdiff_t codeOffset, void *paramBlock,
-size_t paramSize, void* dummy_pthread_data );
+typedef void (*mach_inject_entry)(ptrdiff_t codeOffset, void *paramBlock,
+                                  size_t paramSize, void *dummy_pthread_data);
 
 __BEGIN_DECLS
 
@@ -39,11 +39,11 @@ __BEGIN_DECLS
 
 mach_error_t
 mach_inject(
-            const mach_inject_entry	threadEntry,
-            const void				*paramBlock,
-            size_t					paramSize,
-            pid_t					targetProcess,
-            vm_size_t				stackSize );
+    const mach_inject_entry threadEntry,
+    const void *paramBlock,
+    size_t paramSize,
+    pid_t targetProcess,
+    vm_size_t stackSize);
 
 /*******************************************************************************
  Given a pointer, returns its Mach-O image and image size.
@@ -60,11 +60,11 @@ mach_inject(
 
 mach_error_t
 machImageForPointer(
-                    const void *pointer,
-                    const void **image,
-                    unsigned long *size,
-                    unsigned int *jumpTableOffset,
-                    unsigned int *jumpTableSize );
+    const void *pointer,
+    const void **image,
+    unsigned long *size,
+    unsigned int *jumpTableOffset,
+    unsigned int *jumpTableSize);
 
 __END_DECLS
-#endif	//	_mach_inject_
+#endif //	_mach_inject_
