@@ -10,6 +10,23 @@
 		49707930215F7249007DB457 /* forceFullDesktopBar in CopyFiles */ = {isa = PBXBuildFile; fileRef = 775D43651BCC256D002EDD8A /* forceFullDesktopBar */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		49707931215F724B007DB457 /* dockInjection.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 775D43731BCC25E0002EDD8A /* dockInjection.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		49707932215F724D007DB457 /* bootstrap.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 776F39081BCC2F6C00E01AD0 /* bootstrap.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		49D220032165994300CD81D8 /* input.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D21FF22165994300CD81D8 /* input.h */; };
+		49D220042165994400CD81D8 /* itab.c in Sources */ = {isa = PBXBuildFile; fileRef = 49D21FF32165994300CD81D8 /* itab.c */; };
+		49D220052165994400CD81D8 /* udint.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D21FF42165994300CD81D8 /* udint.h */; };
+		49D220062165994400CD81D8 /* types.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D21FF52165994300CD81D8 /* types.h */; };
+		49D220072165994400CD81D8 /* syn.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D21FF62165994300CD81D8 /* syn.h */; };
+		49D220082165994400CD81D8 /* udis86.c in Sources */ = {isa = PBXBuildFile; fileRef = 49D21FF72165994300CD81D8 /* udis86.c */; };
+		49D220092165994400CD81D8 /* decode.c in Sources */ = {isa = PBXBuildFile; fileRef = 49D21FF82165994300CD81D8 /* decode.c */; };
+		49D2200A2165994400CD81D8 /* syn-att.c in Sources */ = {isa = PBXBuildFile; fileRef = 49D21FF92165994300CD81D8 /* syn-att.c */; };
+		49D2200B2165994400CD81D8 /* itab.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D21FFA2165994300CD81D8 /* itab.h */; };
+		49D2200C2165994400CD81D8 /* input.c in Sources */ = {isa = PBXBuildFile; fileRef = 49D21FFB2165994300CD81D8 /* input.c */; };
+		49D2200D2165994400CD81D8 /* syn-intel.c in Sources */ = {isa = PBXBuildFile; fileRef = 49D21FFC2165994300CD81D8 /* syn-intel.c */; };
+		49D2200E2165994400CD81D8 /* extern.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D21FFD2165994300CD81D8 /* extern.h */; };
+		49D2200F2165994400CD81D8 /* syn.c in Sources */ = {isa = PBXBuildFile; fileRef = 49D21FFE2165994300CD81D8 /* syn.c */; };
+		49D220102165994400CD81D8 /* decode.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D21FFF2165994300CD81D8 /* decode.h */; };
+		49D220112165994400CD81D8 /* mach_override.c in Sources */ = {isa = PBXBuildFile; fileRef = 49D220002165994300CD81D8 /* mach_override.c */; };
+		49D220122165994400CD81D8 /* mach_override.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D220012165994300CD81D8 /* mach_override.h */; };
+		49D220132165994400CD81D8 /* udis86.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D220022165994300CD81D8 /* udis86.h */; };
 		775D43691BCC256D002EDD8A /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 775D43681BCC256D002EDD8A /* main.mm */; };
 		775D43761BCC25E0002EDD8A /* dockInjection.h in Headers */ = {isa = PBXBuildFile; fileRef = 775D43751BCC25E0002EDD8A /* dockInjection.h */; };
 		775D43781BCC25E0002EDD8A /* dockInjection.m in Sources */ = {isa = PBXBuildFile; fileRef = 775D43771BCC25E0002EDD8A /* dockInjection.m */; };
@@ -53,6 +70,23 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		49D21FF22165994300CD81D8 /* input.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = input.h; sourceTree = "<group>"; };
+		49D21FF32165994300CD81D8 /* itab.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = itab.c; sourceTree = "<group>"; };
+		49D21FF42165994300CD81D8 /* udint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = udint.h; sourceTree = "<group>"; };
+		49D21FF52165994300CD81D8 /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
+		49D21FF62165994300CD81D8 /* syn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = syn.h; sourceTree = "<group>"; };
+		49D21FF72165994300CD81D8 /* udis86.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = udis86.c; sourceTree = "<group>"; };
+		49D21FF82165994300CD81D8 /* decode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = decode.c; sourceTree = "<group>"; };
+		49D21FF92165994300CD81D8 /* syn-att.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "syn-att.c"; sourceTree = "<group>"; };
+		49D21FFA2165994300CD81D8 /* itab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = itab.h; sourceTree = "<group>"; };
+		49D21FFB2165994300CD81D8 /* input.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = input.c; sourceTree = "<group>"; };
+		49D21FFC2165994300CD81D8 /* syn-intel.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "syn-intel.c"; sourceTree = "<group>"; };
+		49D21FFD2165994300CD81D8 /* extern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = extern.h; sourceTree = "<group>"; };
+		49D21FFE2165994300CD81D8 /* syn.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = syn.c; sourceTree = "<group>"; };
+		49D21FFF2165994300CD81D8 /* decode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = decode.h; sourceTree = "<group>"; };
+		49D220002165994300CD81D8 /* mach_override.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mach_override.c; sourceTree = "<group>"; };
+		49D220012165994300CD81D8 /* mach_override.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mach_override.h; sourceTree = "<group>"; };
+		49D220022165994300CD81D8 /* udis86.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = udis86.h; sourceTree = "<group>"; };
 		775D43651BCC256D002EDD8A /* forceFullDesktopBar */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = forceFullDesktopBar; sourceTree = BUILT_PRODUCTS_DIR; };
 		775D43681BCC256D002EDD8A /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		775D43731BCC25E0002EDD8A /* dockInjection.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = dockInjection.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -96,6 +130,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		49D21FF12165994300CD81D8 /* libudis86 */ = {
+			isa = PBXGroup;
+			children = (
+				49D21FF22165994300CD81D8 /* input.h */,
+				49D21FF32165994300CD81D8 /* itab.c */,
+				49D21FF42165994300CD81D8 /* udint.h */,
+				49D21FF52165994300CD81D8 /* types.h */,
+				49D21FF62165994300CD81D8 /* syn.h */,
+				49D21FF72165994300CD81D8 /* udis86.c */,
+				49D21FF82165994300CD81D8 /* decode.c */,
+				49D21FF92165994300CD81D8 /* syn-att.c */,
+				49D21FFA2165994300CD81D8 /* itab.h */,
+				49D21FFB2165994300CD81D8 /* input.c */,
+				49D21FFC2165994300CD81D8 /* syn-intel.c */,
+				49D21FFD2165994300CD81D8 /* extern.h */,
+				49D21FFE2165994300CD81D8 /* syn.c */,
+				49D21FFF2165994300CD81D8 /* decode.h */,
+			);
+			path = libudis86;
+			sourceTree = "<group>";
+		};
 		775D435C1BCC256D002EDD8A = {
 			isa = PBXGroup;
 			children = (
@@ -135,6 +190,10 @@
 		775D43741BCC25E0002EDD8A /* dockInjection */ = {
 			isa = PBXGroup;
 			children = (
+				49D21FF12165994300CD81D8 /* libudis86 */,
+				49D220002165994300CD81D8 /* mach_override.c */,
+				49D220012165994300CD81D8 /* mach_override.h */,
+				49D220022165994300CD81D8 /* udis86.h */,
 				775D43751BCC25E0002EDD8A /* dockInjection.h */,
 				775D43771BCC25E0002EDD8A /* dockInjection.m */,
 			);
@@ -156,7 +215,16 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49D220122165994400CD81D8 /* mach_override.h in Headers */,
+				49D220052165994400CD81D8 /* udint.h in Headers */,
 				775D43761BCC25E0002EDD8A /* dockInjection.h in Headers */,
+				49D220132165994400CD81D8 /* udis86.h in Headers */,
+				49D220102165994400CD81D8 /* decode.h in Headers */,
+				49D2200B2165994400CD81D8 /* itab.h in Headers */,
+				49D2200E2165994400CD81D8 /* extern.h in Headers */,
+				49D220072165994400CD81D8 /* syn.h in Headers */,
+				49D220062165994400CD81D8 /* types.h in Headers */,
+				49D220032165994300CD81D8 /* input.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,7 +346,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49D220112165994400CD81D8 /* mach_override.c in Sources */,
+				49D2200F2165994400CD81D8 /* syn.c in Sources */,
+				49D2200C2165994400CD81D8 /* input.c in Sources */,
 				775D43781BCC25E0002EDD8A /* dockInjection.m in Sources */,
+				49D220092165994400CD81D8 /* decode.c in Sources */,
+				49D2200A2165994400CD81D8 /* syn-att.c in Sources */,
+				49D220082165994400CD81D8 /* udis86.c in Sources */,
+				49D220042165994400CD81D8 /* itab.c in Sources */,
+				49D2200D2165994400CD81D8 /* syn-intel.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -423,6 +499,11 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+					"HAVE_STRING_H=1",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -433,6 +514,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "HAVE_STRING_H=1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

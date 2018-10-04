@@ -8,6 +8,8 @@
 
 #import "dockInjection.h"
 
+#import "mach_override.h"
+
 @import Foundation;
 @import MachO;
 @import ObjectiveC;
@@ -16,30 +18,8 @@
 #import <sys/mman.h>
 
 __attribute__((constructor)) void install() {
-	unsigned char prologue[] = {
-	    0x55,                   // push rbp
-	    0x48, 0x89, 0xe5,       // mov  rbp,rsp
-	    0x41, 0x57,             // push r15
-	    0x41, 0x56,             // push r14
-	    0x41, 0x55,             // push r13
-	    0x41, 0x54,             // push r12
-	    0x53,                   // push rbx
-	    0x48, 0x83, 0xec, 0x78, // sub  rsp,0x78
-	    0x4c, 0x89, 0xeb,       // mov  rbx,r13
-	    0x4c, 0x89, 0x45, 0xb8, // mov  QWORD PTR [rbp-0x48],r8
-	    0x48, 0x89, 0x4d, 0xb0, // mov  QWORD PTR [rbp-0x50],rcx
-	    0x89, 0x55, 0xd0,       // mov  DWORD PTR [rbp-0x30],edx
-	};
-
-	unsigned char overwritten_code[] = {
-	    0x8b, 0x4d, /*0xd0,*/ // mov ecx,dword ptr [rbp - /* 0x30 */] (makes it a bit more resilient to stack reshuffling)
-	};
-
-	unsigned char injected_code[] = {
-	    0x48, 0x31, 0xc9, // xor rcx,rcx
-	};
-
 	NSLog(@"forceFullDesktopBar installed and running");
+	
 	task_dyld_info_data_t dyld_info;
 	mach_msg_type_number_t count = TASK_DYLD_INFO_COUNT;
 	kern_return_t error;
@@ -61,25 +41,22 @@ __attribute__((constructor)) void install() {
 		NSLog(@"Could not find Dock base address");
 		return;
 	}
-	void *prologue_address;
-	if (!(prologue_address = memmem(dock_base_address, dock_size, prologue, sizeof(prologue)))) {
-		NSLog(@"Could not find function prologue");
-		return;
+	
+	void *function = NULL;
+	for (int i = 0; i < sizeof(functions) / sizeof(*functions); ++i) {
+		NSLog(@"Trying to find function for version %s...", functions[i].version);
+		if ((function = memmem(dock_base_address, dock_size, functions[i].function, functions[i].length))) {
+			NSLog(@"Found function at %p", function);
+			break;
+		}
 	}
-	NSLog(@"Found function prologue at %p", prologue_address);
-
-	void *injection_address;
-	if (!(injection_address = memmem(prologue_address, dock_base_address + dock_size - prologue_address, overwritten_code, sizeof(overwritten_code)))) {
-		NSLog(@"Could not find code to be overwritten");
-		return;
+	
+	if (!function) {
+		NSLog(@"Could not find function");
 	}
-	uintptr_t injection_page_boundary = (uintptr_t)injection_address;
-	injection_page_boundary &= ~(PAGE_SIZE - 1);
-	if (mprotect((void *)injection_page_boundary, (uintptr_t)injection_address + sizeof(injected_code) - injection_page_boundary, PROT_READ | PROT_WRITE | PROT_EXEC)) {
-		NSLog(@"Could not set memory protections due to error %d", errno);
-		return;
-	}
-	NSLog(@"Set memory protections of page at %p to RWX", (void *)injection_page_boundary);
-	memcpy(injection_address, injected_code, sizeof(injected_code));
-	NSLog(@"Wrote %lu bytes of code at %p", sizeof(injected_code), injection_address);
+	
+	NSLog(@"Overrode original function with status %d", mach_override_ptr(function, override, (void *)&original));
+	
+	NSLog(@"Original function is at %p", original);
+	return;
 }
