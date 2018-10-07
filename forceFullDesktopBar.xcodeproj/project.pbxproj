@@ -6,9 +6,29 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		7755D76C216ABFEC007541A4 /* Copy to install folder */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 7755D76D216ABFEC007541A4 /* Build configuration list for PBXAggregateTarget "Copy to install folder" */;
+			buildPhases = (
+				7755D776216ABFF6007541A4 /* CopyFiles */,
+			);
+			dependencies = (
+				7755D771216ABFF2007541A4 /* PBXTargetDependency */,
+				7755D773216ABFF3007541A4 /* PBXTargetDependency */,
+				7755D775216ABFF4007541A4 /* PBXTargetDependency */,
+			);
+			name = "Copy to install folder";
+			productName = "Copy to install folder";
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		7755D756216AB371007541A4 /* fishhook.c in Sources */ = {isa = PBXBuildFile; fileRef = 7755D754216AB371007541A4 /* fishhook.c */; };
 		7755D757216AB371007541A4 /* fishhook.h in Headers */ = {isa = PBXBuildFile; fileRef = 7755D755216AB371007541A4 /* fishhook.h */; };
+		7755D777216AC002007541A4 /* forceFullDesktopBar in CopyFiles */ = {isa = PBXBuildFile; fileRef = 775D43651BCC256D002EDD8A /* forceFullDesktopBar */; };
+		7755D778216AC004007541A4 /* dockInjection.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 775D43731BCC25E0002EDD8A /* dockInjection.dylib */; };
+		7755D779216AC005007541A4 /* bootstrap.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 776F39081BCC2F6C00E01AD0 /* bootstrap.dylib */; };
 		775D43691BCC256D002EDD8A /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 775D43681BCC256D002EDD8A /* main.mm */; };
 		775D43781BCC25E0002EDD8A /* dockInjection.m in Sources */ = {isa = PBXBuildFile; fileRef = 775D43771BCC25E0002EDD8A /* dockInjection.m */; };
 		775D43861BCC2CB7002EDD8A /* injector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 775D43821BCC2CB7002EDD8A /* injector.cpp */; };
@@ -19,6 +39,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		7755D770216ABFF2007541A4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 775D435D1BCC256D002EDD8A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 775D43721BCC25E0002EDD8A;
+			remoteInfo = dockInjection;
+		};
+		7755D772216ABFF3007541A4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 775D435D1BCC256D002EDD8A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 776F39071BCC2F6C00E01AD0;
+			remoteInfo = bootstrap;
+		};
+		7755D774216ABFF4007541A4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 775D435D1BCC256D002EDD8A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 775D43641BCC256D002EDD8A;
+			remoteInfo = forceFullDesktopBar;
+		};
 		775D43801BCC2BA7002EDD8A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 775D435D1BCC256D002EDD8A /* Project object */;
@@ -36,6 +77,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		7755D776216ABFF6007541A4 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(PROJECT_DIR)/install";
+			dstSubfolderSpec = 0;
+			files = (
+				7755D777216AC002007541A4 /* forceFullDesktopBar in CopyFiles */,
+				7755D778216AC004007541A4 /* dockInjection.dylib in CopyFiles */,
+				7755D779216AC005007541A4 /* bootstrap.dylib in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		775D43631BCC256D002EDD8A /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -229,6 +282,11 @@
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Brian Kendall";
 				TargetAttributes = {
+					7755D76C216ABFEC007541A4 = {
+						CreatedOnToolsVersion = 9.3.1;
+						DevelopmentTeam = F8M4YUY649;
+						ProvisioningStyle = Automatic;
+					};
 					775D43641BCC256D002EDD8A = {
 						CreatedOnToolsVersion = 7.0.1;
 					};
@@ -255,6 +313,7 @@
 				775D43641BCC256D002EDD8A /* forceFullDesktopBar */,
 				775D43721BCC25E0002EDD8A /* dockInjection */,
 				776F39071BCC2F6C00E01AD0 /* bootstrap */,
+				7755D76C216ABFEC007541A4 /* Copy to install folder */,
 			);
 		};
 /* End PBXProject section */
@@ -291,6 +350,21 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		7755D771216ABFF2007541A4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 775D43721BCC25E0002EDD8A /* dockInjection */;
+			targetProxy = 7755D770216ABFF2007541A4 /* PBXContainerItemProxy */;
+		};
+		7755D773216ABFF3007541A4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 776F39071BCC2F6C00E01AD0 /* bootstrap */;
+			targetProxy = 7755D772216ABFF3007541A4 /* PBXContainerItemProxy */;
+		};
+		7755D775216ABFF4007541A4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 775D43641BCC256D002EDD8A /* forceFullDesktopBar */;
+			targetProxy = 7755D774216ABFF4007541A4 /* PBXContainerItemProxy */;
+		};
 		775D43811BCC2BA7002EDD8A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 775D43721BCC25E0002EDD8A /* dockInjection */;
@@ -304,6 +378,24 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		7755D76E216ABFEC007541A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = F8M4YUY649;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		7755D76F216ABFEC007541A4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = F8M4YUY649;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		775D436A1BCC256D002EDD8A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -458,6 +550,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		7755D76D216ABFEC007541A4 /* Build configuration list for PBXAggregateTarget "Copy to install folder" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7755D76E216ABFEC007541A4 /* Debug */,
+				7755D76F216ABFEC007541A4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		775D43601BCC256D002EDD8A /* Build configuration list for PBXProject "forceFullDesktopBar" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
