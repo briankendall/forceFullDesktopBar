@@ -7,14 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7755D756216AB371007541A4 /* fishhook.c in Sources */ = {isa = PBXBuildFile; fileRef = 7755D754216AB371007541A4 /* fishhook.c */; };
+		7755D757216AB371007541A4 /* fishhook.h in Headers */ = {isa = PBXBuildFile; fileRef = 7755D755216AB371007541A4 /* fishhook.h */; };
 		775D43691BCC256D002EDD8A /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 775D43681BCC256D002EDD8A /* main.mm */; };
-		775D43761BCC25E0002EDD8A /* dockInjection.h in Headers */ = {isa = PBXBuildFile; fileRef = 775D43751BCC25E0002EDD8A /* dockInjection.h */; };
 		775D43781BCC25E0002EDD8A /* dockInjection.m in Sources */ = {isa = PBXBuildFile; fileRef = 775D43771BCC25E0002EDD8A /* dockInjection.m */; };
-		775D43861BCC2CB7002EDD8A /* injector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 775D43821BCC2CB7002EDD8A /* injector.cpp */; settings = {ASSET_TAGS = (); }; };
-		775D43871BCC2CB7002EDD8A /* mach_inject.c in Sources */ = {isa = PBXBuildFile; fileRef = 775D43841BCC2CB7002EDD8A /* mach_inject.c */; settings = {ASSET_TAGS = (); }; };
-		776F390E1BCC2F9B00E01AD0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 776F390D1BCC2F9B00E01AD0 /* main.cpp */; settings = {ASSET_TAGS = (); }; };
+		775D43861BCC2CB7002EDD8A /* injector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 775D43821BCC2CB7002EDD8A /* injector.cpp */; };
+		775D43871BCC2CB7002EDD8A /* mach_inject.c in Sources */ = {isa = PBXBuildFile; fileRef = 775D43841BCC2CB7002EDD8A /* mach_inject.c */; };
+		776F390E1BCC2F9B00E01AD0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 776F390D1BCC2F9B00E01AD0 /* main.cpp */; };
 		776F39171BCC332D00E01AD0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 776F39161BCC332D00E01AD0 /* Foundation.framework */; };
-		776F39181BCC36B000E01AD0 /* processes.mm in Sources */ = {isa = PBXBuildFile; fileRef = 776F39111BCC31A800E01AD0 /* processes.mm */; settings = {ASSET_TAGS = (); }; };
+		776F39181BCC36B000E01AD0 /* processes.mm in Sources */ = {isa = PBXBuildFile; fileRef = 776F39111BCC31A800E01AD0 /* processes.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,10 +48,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7755D754216AB371007541A4 /* fishhook.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = fishhook.c; path = forceFullDesktopBar/fishhook.c; sourceTree = SOURCE_ROOT; };
+		7755D755216AB371007541A4 /* fishhook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fishhook.h; path = forceFullDesktopBar/fishhook.h; sourceTree = SOURCE_ROOT; };
 		775D43651BCC256D002EDD8A /* forceFullDesktopBar */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = forceFullDesktopBar; sourceTree = BUILT_PRODUCTS_DIR; };
 		775D43681BCC256D002EDD8A /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		775D43731BCC25E0002EDD8A /* dockInjection.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = dockInjection.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
-		775D43751BCC25E0002EDD8A /* dockInjection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = dockInjection.h; sourceTree = "<group>"; };
 		775D43771BCC25E0002EDD8A /* dockInjection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = dockInjection.m; sourceTree = "<group>"; };
 		775D43821BCC2CB7002EDD8A /* injector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = injector.cpp; sourceTree = "<group>"; };
 		775D43831BCC2CB7002EDD8A /* injector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = injector.h; sourceTree = "<group>"; };
@@ -129,7 +131,8 @@
 		775D43741BCC25E0002EDD8A /* dockInjection */ = {
 			isa = PBXGroup;
 			children = (
-				775D43751BCC25E0002EDD8A /* dockInjection.h */,
+				7755D754216AB371007541A4 /* fishhook.c */,
+				7755D755216AB371007541A4 /* fishhook.h */,
 				775D43771BCC25E0002EDD8A /* dockInjection.m */,
 			);
 			path = dockInjection;
@@ -150,7 +153,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				775D43761BCC25E0002EDD8A /* dockInjection.h in Headers */,
+				7755D757216AB371007541A4 /* fishhook.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,6 +275,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7755D756216AB371007541A4 /* fishhook.c in Sources */,
 				775D43781BCC25E0002EDD8A /* dockInjection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -468,6 +472,7 @@
 				776F390A1BCC2F6C00E01AD0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
