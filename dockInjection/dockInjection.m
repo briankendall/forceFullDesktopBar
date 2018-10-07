@@ -7,12 +7,12 @@
 #pragma clang diagnostic ignored "-Wundeclared-selector"
 
 // Undocumented CoreGraphics function:
-CGPoint CGSCurrentInputPointerPosition();
+CGPoint CGSCurrentInputPointerPosition(void);
 
 static IMP originalMissionControlSetupSpacesStripControllerForDisplay;
 static IMP originalChangeMode;
 static int mouseOverrideCount = 0;
-static CGPoint (*originalCGSCurrentInputPointerPosition)();
+static CGPoint (*originalCGSCurrentInputPointerPosition)(void);
 
 static void swizzle_missionControlSetupSpacesStripControllerForDisplay(id self, SEL _cmd, void *arg2, bool arg3)
 {
