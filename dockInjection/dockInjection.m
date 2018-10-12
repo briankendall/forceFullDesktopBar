@@ -6,11 +6,17 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
 
+#define dockSwipeGesturePhase 123
+#define dockSwipeGestureMotion 134
+#define dockSwipeEvent 30
+#define kIOHIDGestureMotionVerticalY 2
+
 // Undocumented CoreGraphics function:
 CGPoint CGSCurrentInputPointerPosition(void);
 
 static IMP originalMissionControlSetupSpacesStripControllerForDisplay;
 static IMP originalChangeMode;
+static IMP originalHandleEvent;
 static int mouseOverrideCount = 0;
 static CGPoint (*originalCGSCurrentInputPointerPosition)(void);
 
@@ -34,11 +40,10 @@ static CGPoint moveToTopOfScreen(CGPoint p)
     }
     
     NSLog(@"forceFullDesktopBar error: could not determine which screen contains mouse coordinates (%f %f)", p.x, p.y);
-    
     return p;
 }
 
-void swizzle_changeMode(id self, SEL _cmd, long long mode)
+static void swizzle_changeMode(id self, SEL _cmd, long long mode)
 {
     if (mode == 1) {
         mouseOverrideCount = 1;
@@ -46,6 +51,22 @@ void swizzle_changeMode(id self, SEL _cmd, long long mode)
     
     void (*originalFunction)(id, SEL, long long) = (void (*)(id, SEL, long long))originalChangeMode;
     originalFunction(self, _cmd, mode);
+}
+
+static void swizzle_handleEvent(id self, SEL _cmd, CGEventRef event)
+{
+    if (event) {
+        CGEventType type = CGEventGetType(event);
+        CGGesturePhase phase = (CGGesturePhase)CGEventGetIntegerValueField(event, dockSwipeGestureMotion);
+        uint64_t direction = (CGGesturePhase)CGEventGetIntegerValueField(event, dockSwipeGesturePhase);
+        
+        if (type == dockSwipeEvent && phase == kCGGesturePhaseBegan && direction == kIOHIDGestureMotionVerticalY) {
+            mouseOverrideCount = 2;
+        }
+    }
+    
+    void (*originalFunction)(id, SEL, CGEventRef) = (void (*)(id, SEL, CGEventRef))originalHandleEvent;
+    originalFunction(self, _cmd, event);
 }
 
 static CGPoint overrideCGSCurrentInputPointerPosition()
@@ -60,50 +81,53 @@ static CGPoint overrideCGSCurrentInputPointerPosition()
     }
 }
 
-void macOS10_11Method()
+bool swizzleMethod(NSString *className, SEL orig, IMP newMethod, IMP *originalFunction)
 {
-    id targetClass = NSClassFromString(@"WVExpose");
+    id targetClass = NSClassFromString(className);
     
     if (!targetClass) {
-        NSLog(@"forceFullDesktopBar error: Unable to find WVExpose class... cannot proceed");
-        return;
+        NSLog(@"forceFullDesktopBar error: Unable to find %@ class... cannot proceed", className);
+        return false;
     }
     
-    SEL orig = @selector(_missionControlSetupSpacesStripControllerForDisplay:showFullBar:);
-    IMP newMethod = (IMP)swizzle_missionControlSetupSpacesStripControllerForDisplay;
     Method origMethod = class_getInstanceMethod(targetClass, orig);
     
     if (!origMethod) {
-        NSLog(@"forceFullDesktopBar error: Unable to find target method in WVExpose class... cannot proceed");
-        return;
+        NSLog(@"forceFullDesktopBar error: Unable to find target method in %@ class... cannot proceed", className);
+        return false;
     }
     
-    originalMissionControlSetupSpacesStripControllerForDisplay = method_getImplementation(origMethod);
+    (*originalFunction) = method_getImplementation(origMethod);
     method_setImplementation(origMethod, newMethod);
     
-    NSLog(@"forceFullDesktopBar: Successfully swizzled target method in WVExpose class");
+    NSLog(@"forceFullDesktopBar: Successfully swizzled target method in %@ class", className);
+    return true;
+}
+
+void macOS10_11Method()
+{
+    swizzleMethod(@"WVExpose",
+                  @selector(_missionControlSetupSpacesStripControllerForDisplay:showFullBar:),
+                  (IMP)swizzle_missionControlSetupSpacesStripControllerForDisplay,
+                  &originalMissionControlSetupSpacesStripControllerForDisplay);
 }
 
 void macOS10_13AndLaterMethod()
 {    
-    id targetClass = NSClassFromString(@"_TtC4Dock8WVExpose");
-    
-    if (!targetClass) {
-        NSLog(@"forceFullDesktopBar error: Unable to find _TtC4Dock8WVExpose class... cannot proceed");
+    bool success = swizzleMethod(@"_TtC4Dock8WVExpose", @selector(changeMode:), (IMP)swizzle_changeMode,
+                                 &originalChangeMode);
+    if (!success) {
         return;
     }
     
-    SEL orig = @selector(changeMode:);
-    IMP newMethod = (IMP)swizzle_changeMode;
-    Method origMethod = class_getInstanceMethod(targetClass, orig);
+    success = swizzleMethod(@"DOCKGestures",
+                            @selector(handleEvent:),
+                            (IMP)swizzle_handleEvent,
+                            &originalHandleEvent);
     
-    if (!origMethod) {
-        NSLog(@"forceFullDesktopBar error: Unable to find target method in _TtC4Dock8WVExpose class... cannot proceed");
+    if (!success) {
         return;
     }
-    
-    originalChangeMode = method_getImplementation(origMethod);
-    method_setImplementation(origMethod, newMethod);
     
     int result = rebind_symbols((struct rebinding[2]){{"CGSCurrentInputPointerPosition", overrideCGSCurrentInputPointerPosition, (void *)&originalCGSCurrentInputPointerPosition}}, 1);
     
@@ -112,7 +136,7 @@ void macOS10_13AndLaterMethod()
         return;
     }
     
-    NSLog(@"forceFullDesktopBar: Successfully swizzled target method in _TtC4Dock8WVExpose class and rebound CGSCurrentInputPointerPosition symbol");
+    NSLog(@"forceFullDesktopBar: successfully rebound CGSCurrentInputPointerPosition symbol");
 }
 
 __attribute__((constructor)) void install()
