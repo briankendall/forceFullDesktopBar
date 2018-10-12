@@ -46,6 +46,7 @@ static CGPoint moveToTopOfScreen(CGPoint p)
 static void swizzle_changeMode(id self, SEL _cmd, long long mode)
 {
     if (mode == 1) {
+        NSLog(@"forceFullDesktopBar: Caught dock changing mode, will override pointer position");
         mouseOverrideCount = 1;
     }
     
@@ -61,6 +62,7 @@ static void swizzle_handleEvent(id self, SEL _cmd, CGEventRef event)
         uint64_t direction = (CGGesturePhase)CGEventGetIntegerValueField(event, dockSwipeGesturePhase);
         
         if (type == dockSwipeEvent && phase == kCGGesturePhaseBegan && direction == kIOHIDGestureMotionVerticalY) {
+            NSLog(@"forceFullDesktopBar: Caught beginning of vertical swipe, will override pointer position");
             mouseOverrideCount = 2;
         }
     }
@@ -75,10 +77,11 @@ static CGPoint overrideCGSCurrentInputPointerPosition()
     
     if (mouseOverrideCount > 0) {
         mouseOverrideCount -= 1;
-        return moveToTopOfScreen(result);
-    } else {
-        return result;
+        result = moveToTopOfScreen(result);
+        NSLog(@"forceFullDesktopBar: overriding pointer position to: %f %f", result.x, result.y);
     }
+    
+    return result;
 }
 
 bool swizzleMethod(NSString *className, SEL orig, IMP newMethod, IMP *originalFunction)
