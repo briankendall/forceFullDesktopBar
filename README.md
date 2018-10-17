@@ -1,26 +1,22 @@
-### Note about macOS 10.12 Sierra:
-
-forceFullDesktopBar does not currently work with macOS Sierra. Though I am trying to figure out how to update it, there's a good chance I never will be able to. The Dock in 10.12 has been significantly rewritten in Swift, and the convenient Objective-C methods that were easy to extract from its binary and had clearly readable names and arguments are now gone, replaced with functions that have no symbol at all. While I'm sure it's possible to fix it, it would require extensive knowledge of reverse engineering and a whole lot of time, neither of which I currently have. Furthermore it would likely require using the much less reliable mach_override method, which is quite likely to break between minor system updates (like from 10.12 to 10.12.1) and when it breaks it will cause the Dock to crash.
-
-The best alternative right now is to use another program of mine, [missionControlFullDesktopBar](https://github.com/briankendall/missionControlFullDesktopBar) in conjunction with a utility that lets you bind terminal commands to mouse buttons, keystrokes, or trackpad gestures like [BetterTouchTool](http://bettertouchtool.net). It's not as good of a solution but it gets the job done.
-
 # Force Full Desktop Bar
 
-This is a utility for OS X 10.11 El Capitan that changes the behavior of Mission Control so that the desktop bar is always full size and showing previews of the desktops, just like it was in Yosemite and earlier. It's for users like myself who really hate that particular change Apple made in El Capitan and find that it constantly interrupts their workflow and causes much frustration.
+This is a utility for macOS 10.11, 10.13, and 10.14 that changes the behavior of Mission Control so that the desktop bar is always full size and showing previews of the desktops, just like it was in macOS 10.10 and earlier. It's for users like myself who really hate that particular change Apple made in El Capitan and find that it constantly interrupts their workflow and causes much frustration.
 
-This is accomplished by injecting code in the Dock process. Granted I'm not all that good with tinkering around in binaries and looking at disassembled / decompiled code, but unfortunately I didn't find any hidden preference for doing this. Obviously that would be a much better way of doing this, and I sincerely hope someone finds one that I missed. If there isn't, however, maybe we'll get lucky and Apple will decide to add a proper setting or hidden preference for bringing back the old Mission Control behavior. But I'm not feeling too optimistic about that.
+This is accomplished by injecting code in the Dock process and modifying its behavior. Unfortunately I didn't find any hidden preference for doing this, which would of course be a lot better. Maybe we'll get lucky and Apple will decide to add a proper setting or hidden preference for bringing back the old Mission Control behavior. However we're three major macOS releases in and they still haven't done it, so that probably won't ever happen.
 
 ### Installation (easy / automatic)
 
-1. First, since this utility injects code into the Dock, you must first disable System Integrity Protection. However, it's not necessary to disable it completely — just the parts that prevent you from injecting code into Apple processes. It's not possible to do this when OS X is running normally; you'll have to reboot your computer into the Recovery Mode and disable it from there. Here's how to do it:
+1. First, since this utility injects code into the Dock, you must first disable System Integrity Protection. However, it's not necessary to disable it completely — just the parts that prevent you from injecting code into Apple processes. It's not possible to do this when macOS is running normally; you'll have to reboot your computer into the Recovery Mode and disable it from there. Here's how to do it:
 
   1. Boot into Recovery Mode: restart your Mac and hold Command+R
-  2. Once the main Recovery Mode window appears (i.e. OS X Utilities), open the Utilities menu and pick Terminal
-  3. Type the following into the terminal window and press return:
-    * `csrutil enable --without debug`
-  4. Reboot your system:
-    * `reboot`
-2. Back in normal OS X, open Terminal.app
+  2. Once the main Recovery Mode window appears (it will read "macOS Utilities" or "OS X Utilities"), open the Utilities menu and pick Terminal
+  3. If you're running macOS 10.14, type the following into the terminal window and press return:    
+     `csrutil enable --without debug --without fs`    
+     If you're running macOS 10.13 or earlier, type the following into the terminal window and press return:    
+     `csrutil enable --without debug`
+  4. Reboot your system:    
+     `reboot`
+2. Back in normal macOS, open Terminal.app
 3. Navigate to where you downloaded the release of forceFullDesktopBar
   * `cd /path/to/forceFullDesktopBar`
   * or, if you cloned the repo, navigate to forceFullDesktopBar/install
@@ -65,21 +61,28 @@ When forceFullDesktopBar is not run as a daemon, it will try to inject its paylo
 
 forceFullDesktopBar requires both bootstrap.dylib and dockInjection.dylib in order to work. It will first look for both files in the current directory, and if it doesn't find them, it will look for them in /usr/local/forceFullDesktopBar/
 
+### And what of macOS 10.12?
+
+Unfortunately I was never able to find a suitable method of accomplishing this in macOS 10.12's version of the Dock. Starting in 10.13, having the cursor be at the top of the screen would cause Mission Control to open with the full desktop bar, which provided a new means of hacking it. But in 10.12 it would probably require manually overriding a function by its address, which is fairly unstable and dangerous. I'd rather not do that. Fortunately not many people are running 10.12 any longer so I don't think it's _too_ big of a deal that it's not supported.
+
 ### Is this safe???
 
 You might be thinking that injecting code into the Dock process sounds pretty fishy, and are suspicious of this software. You also might not like the idea of disabling System Integrity Protection. These are all valid worries and if you feel strongly that they're worrisome enough to prevent you from using this tool, then you probably shouldn't.
 
-That said, I'm not too worried about disabling System Integrity Protection. For one, the only part that has to be disabled is the part that restricts debugging and injecting code into Apple processes. That's a new security measure starting with OS X 10.11, and for all previous versions of OS X I have **never** had a problem with any software, malicious or otherwise, injecting code into Apple processes and causing problems. Never. Hell, I haven't even once had a piece of malware get onto one of my OS X systems, and what malware I have encountered on other people's systems generally doesn't *need* to inject any code into Apple processes. It can wreck havoc on your computer, steal your data, or cause annoying ads to pop up uninhibited with SIP running, provided someone made the unfortunate mistake of giving it root access by typing in their admin password when they shouldn't have.
+That said, I'm not too worried about disabling System Integrity Protection. For one, the only part that has to be disabled is the part that restricts debugging and injecting code into Apple processes (and filesystem protections in 10.14). That's a new security measure starting with 10.11, and for all previous versions of macOS I never had a problem with any software, malicious or otherwise, injecting code into Apple processes and causing problems. Never. I haven't even once had a piece of malware get onto one of my macs, and what malware I have encountered on other people's systems generally doesn't *need* to inject any code into Apple processes. It can wreck havoc on your computer, steal your data, or cause annoying ads to pop up uninhibited with SIP running, provided someone made the unfortunate mistake of giving it root access by typing in their admin password when they shouldn't have.
 
-As for injecting code into the Dock process, the particular way forceFullDesktopBar modifies the Dock is quite safe. You can look at the source code yourself — dockInjection.m in particular — if you want to, but the only thing it's doing is dynamically swizzling the _missionControlSetupSpacesStripControllerForDisplay:showFullBar: method of the WVExpose class. The new method its replacing it with just calls the old method, except it passes in true for the showFullBar parameter. It's hard for there to be a more clean and safer way to change an app's behavior through injection than something like that — there's no question what the 'showFullBar' parameter is for!
+As for injecting code into the Dock process, in macOS 10.11, the particular way forceFullDesktopBar modifies the Dock is quite safe. You can look at the source code yourself — dockInjection.m in particular — if you want to, but the only thing it's doing is dynamically swizzling the _missionControlSetupSpacesStripControllerForDisplay:showFullBar: method of the WVExpose class. The new method its replacing it with just calls the old method, except it passes in true for the showFullBar parameter. It's hard for there to be a more clean and safer way to change an app's behavior through injection than something like that — there's no question what the 'showFullBar' parameter is for!
 
-Anyway, if something does go wrong as a result of using this software, which I admit is always a possibility, especially with shady stuff like code injections, all you have to do is terminate the process and restart the Dock process to get back to normal. Or if things get really screwed up, just delete the forceFullDesktopBar binary and/or LaunchDaemon plist and reboot.
+In macOS 10.13 and 10.14 it's a _little_ bit more hacky, but still relatively safe. Methods are still being replaced by name or by a visible symbol in the binary, and the way the behavior of the Dock is modified is unlikely to cause any serious issues as it's tricking the Dock into thinking that the mouse cursor is at the top of the screen for the moment that Mission Control is activated. This only happens when entering into Mission Control, and the Dock's behavior shouldn't change in any other circumstance.
+
+Anyway, if something does go wrong as a result of using this software, which I admit is always a possibility especially with shady stuff like code injections, all you have to do is terminate the process and restart the Dock process to get back to normal. Or if things get really screwed up, just delete the forceFullDesktopBar binary and/or LaunchDaemon plist and reboot.
 
 ### Why go through all of this trouble?
 
 When I first started using El Capitan, I immediately knew I was going to have a hard time with the new Mission Control UI. My muscle memory is pretty hard-wired to move the cursor to specific spots on the screen to change desktops. Furthermore, the new way of interacting with it is very problematic. Let me break it down.
 
 Negative effects of the new Mission Control UI:
+
 - Makes the clickable area for changing desktops smaller
 - No longer provides a preview of the various desktops
 - Accidentally mousing over the wrong desktop button causes all of the desktop buttons to shift as the bar expands to full size, causing the user to have to examine it and decide where to move the mouse in order to click the right one
@@ -87,6 +90,7 @@ Negative effects of the new Mission Control UI:
 - Causes the UI and its context to change when clicking and dragging a window
 
 And just to be fair, I can identify a few marginally positive effects of this change:
+
 - Slightly increases vertical real estate for the windows below the desktop bar, allowing them to be just a little bit bigger
 - Makes the Mission Control UI at least initially appear a little bit simpler looking
 
@@ -94,6 +98,8 @@ So frankly this is a pretty bad user experience degradation. There's almost no b
 
 ### Other info
 
-This project uses code from James Robson's OS X injection tutorial located here: http://soundly.me/osx-injection-override-tutorial-hello-world/
+This project uses code from James Robson's OS X injection tutorial located [here.](http://soundly.me/osx-injection-override-tutorial-hello-world/)
 
-It also uses mach_inject by Jonathan Rentzsch, also used by the OS X injection tutorial.
+It also uses mach_inject by Jonathan Rentzsch, located [here.](https://github.com/rentzsch/mach_inject)
+
+It also also uses fishhook by facebook, located [here.](https://github.com/facebook/fishhook)
