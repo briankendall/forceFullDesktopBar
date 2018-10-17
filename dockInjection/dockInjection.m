@@ -3,6 +3,8 @@
 #import <objc/objc-runtime.h>
 #import "fishhook.h"
 
+#define VERBOSE
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
 
@@ -28,25 +30,28 @@ static void swizzle_missionControlSetupSpacesStripControllerForDisplay(id self, 
 
 static CGPoint moveToTopOfScreen(CGPoint p)
 {
-    NSArray *screens = [NSScreen screens];
+    CGDirectDisplayID displayContainingCursor;
+    uint32_t matchingDisplayCount = 0;
+                                     
+    CGGetDisplaysWithPoint(p, 1, &displayContainingCursor, &matchingDisplayCount);
     
-    for(NSScreen *screen in screens) {
-        CGRect rect = NSRectToCGRect([screen frame]);
+    if (matchingDisplayCount >= 1) {
+        CGRect rect = CGDisplayBounds(displayContainingCursor);
+        p.y = rect.origin.y+1;
+        return p;
         
-        if (CGRectContainsPoint(rect, p)) {
-            p.y = rect.origin.y+1;
-            return p;
-        }
+    } else {
+        NSLog(@"forceFullDesktopBar error: could not determine which screen contains mouse coordinates (%f %f)", p.x, p.y);
+        return p;
     }
-    
-    NSLog(@"forceFullDesktopBar error: could not determine which screen contains mouse coordinates (%f %f)", p.x, p.y);
-    return p;
 }
 
 static void swizzle_changeMode(id self, SEL _cmd, long long mode)
 {
     if (mode == 1) {
+#ifdef VERBOSE
         NSLog(@"forceFullDesktopBar: Caught dock changing mode, will override pointer position");
+#endif
         mouseOverrideCount = 1;
     }
     
@@ -62,7 +67,9 @@ static void swizzle_handleEvent(id self, SEL _cmd, CGEventRef event)
         uint64_t direction = (CGGesturePhase)CGEventGetIntegerValueField(event, dockSwipeGesturePhase);
         
         if (type == dockSwipeEvent && phase == kCGGesturePhaseBegan && direction == kIOHIDGestureMotionVerticalY) {
+#ifdef VERBOSE
             NSLog(@"forceFullDesktopBar: Caught beginning of vertical swipe, will override pointer position");
+#endif
             mouseOverrideCount = 2;
         }
     }
@@ -78,7 +85,9 @@ static CGPoint overrideCGSCurrentInputPointerPosition()
     if (mouseOverrideCount > 0) {
         mouseOverrideCount -= 1;
         result = moveToTopOfScreen(result);
+#ifdef VERBOSE
         NSLog(@"forceFullDesktopBar: overriding pointer position to: %f %f", result.x, result.y);
+#endif
     }
     
     return result;
