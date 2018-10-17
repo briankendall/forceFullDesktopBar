@@ -12,4 +12,8 @@ rmdir /usr/local/forceFullDesktopBar
 rm /Library/LaunchDaemons/net.briankendall.forceFullDesktopBar.plist
 launchctl remove net.briankendall.forceFullDesktopBar
 
+# Give app a moment to fully quit:
+sleep 0.5
+killall Dock
+
 echo "Uninstalled"
