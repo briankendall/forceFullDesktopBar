@@ -11,6 +11,21 @@
 #include <signal.h>
 #include <sys/proc_info.h>
 #include <libproc.h>
+#include <syslog.h>
+#include <stdarg.h>
+
+void printError(const char *format, ...)
+{
+    va_list argList1, argList2;
+    
+    va_start(argList1, format);
+    vsyslog(LOG_ERR, format, argList1);
+    va_end(argList1);
+    
+    va_start(argList2, format);
+    vprintf(format, argList2);
+    va_end(argList2);
+}
 
 Injector::Injector(const char *bootstrapPath) : module(0), bootstrapfn(0)
 {
@@ -20,7 +35,7 @@ Injector::Injector(const char *bootstrapPath) : module(0), bootstrapfn(0)
     printf("module: %p\n", module);
     if (!module)
     {
-        fprintf(stderr, "dlopen error: %s\n", dlerror());
+        printError("forceFullDesktopBar error: dlopen error: %s\n", dlerror());
         return;
     }
 
@@ -29,7 +44,7 @@ Injector::Injector(const char *bootstrapPath) : module(0), bootstrapfn(0)
 
     if (!bootstrapfn)
     {
-        fprintf(stderr, "could not locate bootstrap fn\n");
+        printError("forceFullDesktopBar error: could not locate bootstrap fn\n");
         return;
     }
 }
@@ -47,10 +62,15 @@ void Injector::inject(pid_t pid, const char* lib)
 {
     if (!module || !bootstrapfn)
     {
-        fprintf(stderr, "failed to inject: module:%p bootstrapfn:%p\n", module, bootstrapfn);
+        printError("forceFullDesktopBar error: failed to inject: module:%p bootstrapfn:%p\n", module, bootstrapfn);
         return;
     }
+    
     mach_error_t err = mach_inject((mach_inject_entry)bootstrapfn, lib, strlen(lib) + 1, pid, 0);
+    
+    if (err != 0) {
+        printError("forceFullDesktopBar error: mach_inject failed with error code: %d\n", err);
+    }
 }
 
 pid_t Injector::getProcessByName(const char *name)
@@ -67,10 +87,10 @@ pid_t Injector::getProcessByName(const char *name)
         char curName[PROC_PIDPATHINFO_MAXSIZE];
         memset(curPath, 0, sizeof curPath);
         proc_pidpath(pids[i], curPath, sizeof curPath);
-        int len = strlen(curPath);
+        size_t len = strlen(curPath);
         if (len)
         {
-            int pos = len;
+            size_t pos = len;
             while (pos && curPath[pos] != '/') --pos;
             strcpy(curName, curPath + pos + 1);
             if (!strcmp(curName, name))
