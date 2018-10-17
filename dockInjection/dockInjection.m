@@ -3,7 +3,7 @@
 #import <objc/objc-runtime.h>
 #import "fishhook.h"
 
-#define VERBOSE
+//#define VERBOSE
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"

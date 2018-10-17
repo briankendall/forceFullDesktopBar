@@ -12,6 +12,7 @@
 
 #define kInjectionDylibFileName "dockInjection.dylib"
 #define kBootstrapDylibFileName "bootstrap.dylib"
+#define kDockInjectionSafetyBufferDuration 7.0
 
 @interface Worker : NSObject
 - (void)findProcessesAndInjectAfterDelay:(double)delay;
@@ -22,6 +23,7 @@
     NSSet *previousPids;
     uid_t targetUid;
     bool hasTargetUid;
+    NSTimeInterval lastInjectionTimestamp;
 }
 
 - (id)initWithTargetUid:(uid_t)inTargetUid hasTargetUid:(bool)inHasTargetUid
@@ -32,6 +34,7 @@
         previousPids = [NSSet set];
         targetUid = inTargetUid;
         hasTargetUid = inHasTargetUid;
+        lastInjectionTimestamp = 0;
     }
     
     return self;
@@ -71,9 +74,19 @@
         return;
     }
     
+    NSTimeInterval currentTimestamp = [[NSDate date] timeIntervalSince1970];
+    
+    if ((currentTimestamp - lastInjectionTimestamp) < kDockInjectionSafetyBufferDuration) {
+        NSLog(@"Less than %lf seconds have elapsed since the last attempt at injecting into the Dock. "
+              "Aborting injecting to prevent a never-ending cycle of Dock crashes.", (double)kDockInjectionSafetyBufferDuration);
+        return;
+    }
+    
     pid_t pid = pidObj.intValue;
     Injector inj([[self getBootstrapDylibPath] UTF8String]);
     inj.inject(pid, [[self getInjectionDylibPath] UTF8String]);
+    
+    lastInjectionTimestamp = currentTimestamp;
 }
 
 // Finds new Dock processes since the last check (or since the process started) and
