@@ -12,6 +12,7 @@
 #define dockSwipeGestureMotion 134
 #define dockSwipeEvent 30
 #define kIOHIDGestureMotionVerticalY 2
+#define kIOHIDGestureMotionDoubleTap 6
 
 // Undocumented CoreGraphics function:
 CGPoint CGSCurrentInputPointerPosition(void);
@@ -59,6 +60,16 @@ static void swizzle_changeMode(id self, SEL _cmd, long long mode)
     originalFunction(self, _cmd, mode);
 }
 
+static bool isStartOfTrackpadSwipeUpEvent(CGEventType type, CGGesturePhase phase, uint64_t direction)
+{
+    return type == dockSwipeEvent && phase == kCGGesturePhaseBegan && direction == kIOHIDGestureMotionVerticalY;
+}
+
+static bool isDoubleTapEvent(CGEventType type, CGGesturePhase phase, uint64_t direction)
+{
+    return type == dockSwipeEvent && phase == kCGGesturePhaseNone && direction == kIOHIDGestureMotionDoubleTap;
+}
+
 static void swizzle_handleEvent(id self, SEL _cmd, CGEventRef event)
 {
     if (event) {
@@ -66,9 +77,15 @@ static void swizzle_handleEvent(id self, SEL _cmd, CGEventRef event)
         CGGesturePhase phase = (CGGesturePhase)CGEventGetIntegerValueField(event, dockSwipeGestureMotion);
         uint64_t direction = (CGGesturePhase)CGEventGetIntegerValueField(event, dockSwipeGesturePhase);
         
-        if (type == dockSwipeEvent && phase == kCGGesturePhaseBegan && direction == kIOHIDGestureMotionVerticalY) {
+        if (isStartOfTrackpadSwipeUpEvent(type, phase, direction)) {
 #ifdef VERBOSE
             NSLog(@"forceFullDesktopBar: Caught beginning of vertical swipe, will override pointer position");
+#endif
+            mouseOverrideCount = 2;
+
+        } else if (isDoubleTapEvent(type, phase, direction)) {
+#ifdef VERBOSE
+            NSLog(@"forceFullDesktopBar: Caught magic mouse double tap, will override pointer position");
 #endif
             mouseOverrideCount = 2;
         }
