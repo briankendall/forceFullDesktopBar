@@ -4,6 +4,8 @@ This is a utility for macOS 10.11, 10.13, and 10.14 that changes the behavior of
 
 This is accomplished by injecting code in the Dock process and modifying its behavior. Unfortunately I didn't find any hidden preference for doing this, which would of course be a lot better. Maybe we'll get lucky and Apple will decide to add a proper setting or hidden preference for bringing back the old Mission Control behavior. However we're three major macOS releases in and they still haven't done it, so that probably won't ever happen.
 
+**Note:** if you don't want to disable System Integrity Protection or are otherwise uncomfortable with an app injecting code into the Dock, then you can try [missionControlFullDesktopBar](https://github.com/briankendall/missionControlFullDesktopBar), a standalone app that triggers Mission Control with the full desktop bar without modifying the Dock. It's clunkier and a little harder to set up, but gets the job done.
+
 ### Installation (easy / automatic)
 
 1. First, since this utility injects code into the Dock, you must first disable System Integrity Protection. However, it's not necessary to disable it completely — just the parts that prevent you from injecting code into Apple processes. It's not possible to do this when macOS is running normally; you'll have to reboot your computer into the Recovery Mode and disable it from there. Here's how to do it:
