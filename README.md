@@ -8,14 +8,14 @@ This is accomplished by injecting code in the Dock process and modifying its beh
 
 1. First, since this utility injects code into the Dock, you must first disable System Integrity Protection. However, it's not necessary to disable it completely — just the parts that prevent you from injecting code into Apple processes. It's not possible to do this when macOS is running normally; you'll have to reboot your computer into the Recovery Mode and disable it from there. Here's how to do it:
 
-  1. Boot into Recovery Mode: restart your Mac and hold Command+R
-  2. Once the main Recovery Mode window appears (it will read "macOS Utilities" or "OS X Utilities"), open the Utilities menu and pick Terminal
-  3. If you're running macOS 10.14, type the following into the terminal window and press return:    
-     `csrutil enable --without debug --without fs`    
-     If you're running macOS 10.13 or earlier, type the following into the terminal window and press return:    
-     `csrutil enable --without debug`
-  4. Reboot your system:    
-     `reboot`
+    1. Boot into Recovery Mode: restart your Mac and hold Command+R
+    2. Once the main Recovery Mode window appears (it will read "macOS Utilities" or "OS X Utilities"), open the Utilities menu and pick Terminal
+    3. If you're running macOS 10.14, type the following into the terminal window and press return:    
+       `csrutil enable --without debug --without fs`    
+       If you're running macOS 10.13 or earlier, type the following into the terminal window and press return:    
+       `csrutil enable --without debug`
+    4. Reboot your system:    
+       `reboot`
 2. Back in normal macOS, open Terminal.app
 3. Navigate to where you downloaded the release of forceFullDesktopBar
   * `cd /path/to/forceFullDesktopBar`
