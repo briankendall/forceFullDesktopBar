@@ -1,6 +1,6 @@
 # Force Full Desktop Bar
 
-This is a utility for macOS 10.11, 10.13, and 10.14 that changes the behavior of Mission Control so that the desktop bar is always full size and showing previews of the desktops, just like it was in macOS 10.10 and earlier. It's for users like myself who really hate that particular change Apple made in El Capitan and find that it constantly interrupts their workflow and causes much frustration.
+This is a utility for macOS 10.11, 10.13, 10.14, and 10.15 that changes the behavior of Mission Control so that the desktop bar is always full size and showing previews of the desktops, just like it was in macOS 10.10 and earlier. It's for users like myself who really hate that particular change Apple made in El Capitan and find that it constantly interrupts their workflow and causes much frustration.
 
 This is accomplished by injecting code in the Dock process and modifying its behavior. Unfortunately I didn't find any hidden preference for doing this, which would of course be a lot better. Maybe we'll get lucky and Apple will decide to add a proper setting or hidden preference for bringing back the old Mission Control behavior. However we're three major macOS releases in and they still haven't done it, so that probably won't ever happen.
 
@@ -12,7 +12,7 @@ This is accomplished by injecting code in the Dock process and modifying its beh
 
     1. Boot into Recovery Mode: restart your Mac and hold Command+R
     2. Once the main Recovery Mode window appears (it will read "macOS Utilities" or "OS X Utilities"), open the Utilities menu and pick Terminal
-    3. If you're running macOS 10.14, type the following into the terminal window and press return:    
+    3. If you're running macOS 10.14 or later, type the following into the terminal window and press return:    
        `csrutil enable --without debug --without fs`    
        If you're running macOS 10.13 or earlier, type the following into the terminal window and press return:    
        `csrutil enable --without debug`
@@ -75,7 +75,7 @@ That said, I'm not too worried about disabling System Integrity Protection. For 
 
 As for injecting code into the Dock process, in macOS 10.11, the particular way forceFullDesktopBar modifies the Dock is quite safe. You can look at the source code yourself — dockInjection.m in particular — if you want to, but the only thing it's doing is dynamically swizzling the _missionControlSetupSpacesStripControllerForDisplay:showFullBar: method of the WVExpose class. The new method its replacing it with just calls the old method, except it passes in true for the showFullBar parameter. It's hard for there to be a more clean and safer way to change an app's behavior through injection than something like that — there's no question what the 'showFullBar' parameter is for!
 
-In macOS 10.13 and 10.14 it's a _little_ bit more hacky, but still relatively safe. Methods are still being replaced by name or by a visible symbol in the binary, and the way the behavior of the Dock is modified is unlikely to cause any serious issues as it's tricking the Dock into thinking that the mouse cursor is at the top of the screen for the moment that Mission Control is activated. This only happens when entering into Mission Control, and the Dock's behavior shouldn't change in any other circumstance.
+In macOS 10.13 and later it's a _little_ bit more hacky, but still relatively safe. Methods are still being replaced by name or by a visible symbol in the binary, and the way the behavior of the Dock is modified is unlikely to cause any serious issues as it's tricking the Dock into thinking that the mouse cursor is at the top of the screen for the moment that Mission Control is activated. This only happens when entering into Mission Control, and the Dock's behavior shouldn't change in any other circumstance.
 
 Anyway, if something does go wrong as a result of using this software, which I admit is always a possibility especially with shady stuff like code injections, all you have to do is terminate the process and restart the Dock process to get back to normal. Or if things get really screwed up, just delete the forceFullDesktopBar binary and/or LaunchDaemon plist and reboot.
 
