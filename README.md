@@ -1,6 +1,6 @@
 # Force Full Desktop Bar
 
-This is a utility for macOS 10.11, 10.13, 10.14, and 10.15 that changes the behavior of Mission Control so that the desktop bar is always full size and showing previews of the desktops, just like it was in macOS 10.10 and earlier. It's for users like myself who really hate that particular change Apple made in El Capitan and find that it constantly interrupts their workflow and causes much frustration.
+This is a utility for macOS 10.11 and macOS 10.13 and later (though not currently arm64 macs) that changes the behavior of Mission Control so that the desktop bar is always full size and showing previews of the desktops, just like it was in macOS 10.10 and earlier. It's for users like myself who really hate that particular change Apple made in El Capitan and find that it constantly interrupts their workflow and causes much frustration.
 
 This is accomplished by injecting code in the Dock process and modifying its behavior. Unfortunately I didn't find any hidden preference for doing this, which would of course be a lot better. Maybe we'll get lucky and Apple will decide to add a proper setting or hidden preference for bringing back the old Mission Control behavior. However we're three major macOS releases in and they still haven't done it, so that probably won't ever happen.
 
