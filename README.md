@@ -8,11 +8,13 @@ This is accomplished by injecting code in the Dock process and modifying its beh
 
 ### Installation (easy / automatic)
 
-1. First, since this utility injects code into the Dock, you must first disable System Integrity Protection. However, it's not necessary to disable it completely — just the parts that prevent you from injecting code into Apple processes. It's not possible to do this when macOS is running normally; you'll have to reboot your computer into the Recovery Mode and disable it from there. Here's how to do it:
+1. First, since this utility injects code into the Dock, you must first disable System Integrity Protection. In macOS 11 Big Sur it is necessary to completely disable it as just disabling debugging protections no longer works. In macOS 10.15 and earlier you can just disable the parts that prevent you from injecting code into Apple processes (though you can also disable it completely if you prefer). It's not possible to do this when macOS is running normally; you'll have to reboot your computer into the Recovery Mode and disable it from there. Here's how to do it:
 
     1. Boot into Recovery Mode: restart your Mac and hold Command+R
     2. Once the main Recovery Mode window appears (it will read "macOS Utilities" or "OS X Utilities"), open the Utilities menu and pick Terminal
-    3. If you're running macOS 10.14 or later, type the following into the terminal window and press return:    
+    3. If you're running macOS 11 (Big Sur), type the following into a terminal window and press return:    
+       `csrutil disable`    
+       If you're running macOS 10.14 or 10.15, type the following into the terminal window and press return:    
        `csrutil enable --without debug --without fs`    
        If you're running macOS 10.13 or earlier, type the following into the terminal window and press return:    
        `csrutil enable --without debug`
