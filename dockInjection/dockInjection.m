@@ -172,17 +172,18 @@ __attribute__((constructor)) void install()
 {
     NSLog(@"forceFullDesktopBar: dockInjection installed and running");
     
-    NSInteger osxMinorVersion = [[NSProcessInfo processInfo] operatingSystemVersion].minorVersion;
+	NSInteger osxMajorVersion = NSProcessInfo.processInfo.operatingSystemVersion.majorVersion;
+	NSInteger osxMinorVersion = [[NSProcessInfo processInfo] operatingSystemVersion].minorVersion;
     
     @autoreleasepool {
-        if (osxMinorVersion == 11) {
+        if (osxMajorVersion == 10 && osxMinorVersion == 11) {
             NSLog(@"forceFullDesktopBar: Using 10.11 method...");
             macOS10_11Method();
-        } else if (osxMinorVersion >= 13) {
+        } else if (osxMajorVersion >= 11 || osxMinorVersion >= 13) {
             NSLog(@"forceFullDesktopBar: Using 10.13 and later method...");
             macOS10_13AndLaterMethod();
         } else {
-            NSLog(@"forceFullDesktopBar error: macOS 10.%ld is not supported", osxMinorVersion);
+            NSLog(@"forceFullDesktopBar error: macOS %ld.%ld is not supported", osxMajorVersion, osxMinorVersion);
         }
     }
 }
