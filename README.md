@@ -1,6 +1,6 @@
 # Force Full Desktop Bar
 
-This is a utility for macOS 10.11 and macOS 10.13 and later (though not currently arm64 macs) that changes the behavior of Mission Control so that the desktop bar is always full size and showing previews of the desktops, just like it was in macOS 10.10 and earlier. It's for users like myself who really hate that particular change Apple made in El Capitan and find that it constantly interrupts their workflow and causes much frustration.
+This is a utility for macOS 10.11 and macOS 10.13 and later (now including Apple Silicon macs) that changes the behavior of Mission Control so that the desktop bar is always full size and showing previews of the desktops, just like it was in macOS 10.10 and earlier. It's for users like myself who really hate that particular change Apple made in El Capitan and find that it constantly interrupts their workflow and causes much frustration.
 
 This is accomplished by injecting code in the Dock process and modifying its behavior. Unfortunately I didn't find any hidden preference for doing this, which would of course be a lot better. Maybe we'll get lucky and Apple will decide to add a proper setting or hidden preference for bringing back the old Mission Control behavior. However we're three major macOS releases in and they still haven't done it, so that probably won't ever happen.
 
@@ -10,7 +10,7 @@ This is accomplished by injecting code in the Dock process and modifying its beh
 
 1. First, since this utility injects code into the Dock, you must first disable System Integrity Protection. In macOS 11 Big Sur it is necessary to completely disable it as just disabling debugging protections no longer works. In macOS 10.15 and earlier you can just disable the parts that prevent you from injecting code into Apple processes (though you can also disable it completely if you prefer). It's not possible to do this when macOS is running normally; you'll have to reboot your computer into the Recovery Mode and disable it from there. Here's how to do it:
 
-    1. Boot into Recovery Mode: restart your Mac and hold Command+R
+    1. Boot into Recovery Mode using the instructions in this Apple support document: [About macOS Recovery](https://support.apple.com/guide/mac-help/about-macos-recovery-mchl46d531d6/mac)
     2. Once the main Recovery Mode window appears (it will read "macOS Utilities" or "OS X Utilities"), open the Utilities menu and pick Terminal
     3. If you're running macOS 11 (Big Sur), type the following into a terminal window and press return:    
        `csrutil disable`    
@@ -20,10 +20,13 @@ This is accomplished by injecting code in the Dock process and modifying its beh
        `csrutil enable --without debug`
     4. Reboot your system:    
        `reboot`
-2. Back in normal macOS, open Terminal.app
-3. Navigate to where you downloaded the release of forceFullDesktopBar
-  * `cd /path/to/forceFullDesktopBar`
-  * or, if you cloned the repo, navigate to forceFullDesktopBar/install
+    5. If your mac has an Apple Silicon chip, after your computer boots up normally, open Terminal and execute the following, entering your admin password when prompted:    
+       `sudo nvram boot-args=-arm64e_preview_abi `   
+       ...and then reboot one more time. (Phew! They don't make this easy.)
+2. Back in normal macOS, open Terminal
+3. Navigate to where you downloaded the release of forceFullDesktopBar.
+  * `cd /path/to/forceFullDesktopBar`    
+  <sub>(Note: this will not work if you cloned the repo instead of downloading a release! In that case you must first open the Xcode project and build the "Copy to install folder" target.)</sub>
 4. Execute install.sh as root
   * `sudo ./install.sh`
   * Type in your administrator password when prompted.
@@ -32,10 +35,10 @@ That should install the daemon and modify the Dock process. Mission Control is n
 
 ### Installation (manual)
 
-1. Follow the step 1 in the above "Installation (Easy)" instructions to disable the debugging restrictions of System Integrity Protection.
+1. Follow the step 1 in the above "Installation (Easy)" instructions to disable the necessary restrictions of System Integrity Protection, and if you have an Apple Silicon mac, enable running of arm64e applications.
 2. Create the following directory:
   * /usr/local/forceFullDesktopBar
-3. Copy bootstrap.dylib, dockInjection.dylib, and forceFullDesktopBar into /usr/local/forceFullDesktopBar
+3. Copy dockInjection.dylib and forceFullDesktopBar into /usr/local/forceFullDesktopBar
 4. Copy net.briankendall.forceFullDesktopBar.plist to /Library/LaunchDaemons
 5. Change the owner/group of net.briankendall.forceFullDesktopBar.plist to root:wheel:
   * `sudo chown root:wheel /Library/LaunchDaemons/net.briankendall.forceFullDesktopBar.plist`
@@ -63,7 +66,15 @@ forceFullDesktopBar can be executed on its own, and has two command line argumen
 
 When forceFullDesktopBar is not run as a daemon, it will try to inject its payload into all the current Dock processes (or just the ones for one user if -u is used) and then exit. The launchd property file (net.briankendall.forceFullDesktopBar.plist) will launch the process as a daemon when the system starts up and ensure it keeps running.
 
-forceFullDesktopBar requires both bootstrap.dylib and dockInjection.dylib in order to work. It will first look for both files in the current directory, and if it doesn't find them, it will look for them in /usr/local/forceFullDesktopBar/
+forceFullDesktopBar requires dockInjection.dylib in order to work. It will first look for this file in the current directory, and if it doesn't find it, it will look for it in /usr/local/forceFullDesktopBar/
+
+### Building
+
+As of version 1.2, forceFullDesktopBar uses Frida to do its code injection and function swapping, as its the only library I've found that can do so on Apple Silicon systems. However, Frida is a very heavy-weight library and isn't intended just for simple cases of code injection and function swapping. Consequently Frida's static libraries are too large to include in a GitHub repository, especially when combined together into a fat library, as required by Xcode.
+
+So to build forceFullDesktopBar, first run the bash script named `setup.sh` with the current directory at the root of the project. It will automatically fetch the needed archives from Frida's releases on GitHub, extract the needed static libraries, combine them into fat x86_64 / arm64e libraries, and move them into the right places in the project hierarchy. The script is currently set to download Frida 15.1.7 as that is the latest release as of the time of this writing, but newer releases will probably work too.
+
+Afterwards, open the Xcode project and build the ""Copy to install folder" target. You should now be set up to follow the above installation instructions.
 
 ### And what of macOS 10.12?
 
@@ -102,8 +113,4 @@ So frankly this is a pretty bad user experience degradation. There's almost no b
 
 ### Other info
 
-This project uses code from James Robson's OS X injection tutorial located [here.](http://soundly.me/osx-injection-override-tutorial-hello-world/)
-
-It also uses mach_inject by Jonathan Rentzsch, located [here.](https://github.com/rentzsch/mach_inject)
-
-It also also uses fishhook by facebook, located [here.](https://github.com/facebook/fishhook)
+This project makes extensive use of [Frida](https://frida.re) for code injection and function swapping, specifically its core and gum devkits.

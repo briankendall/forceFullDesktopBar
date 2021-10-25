@@ -1,9 +1,9 @@
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
 #import <objc/objc-runtime.h>
-#import "fishhook.h"
+#include "frida-gum.h"
 
-//#define VERBOSE
+#define VERBOSE
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
@@ -21,7 +21,6 @@ static IMP originalMissionControlSetupSpacesStripControllerForDisplay;
 static IMP originalChangeMode;
 static IMP originalHandleEvent;
 static int mouseOverrideCount = 0;
-static CGPoint (*originalCGSCurrentInputPointerPosition)(void);
 
 static void swizzle_missionControlSetupSpacesStripControllerForDisplay(id self, SEL _cmd, void *arg2, bool arg3)
 {
@@ -97,7 +96,7 @@ static void swizzle_handleEvent(id self, SEL _cmd, CGEventRef event)
 
 static CGPoint overrideCGSCurrentInputPointerPosition()
 {
-    CGPoint result = originalCGSCurrentInputPointerPosition();
+    CGPoint result = CGSCurrentInputPointerPosition();
     
     if (mouseOverrideCount > 0) {
         mouseOverrideCount -= 1;
@@ -158,22 +157,37 @@ void macOS10_13AndLaterMethod()
         return;
     }
     
-    int result = rebind_symbols((struct rebinding[2]){{"CGSCurrentInputPointerPosition", overrideCGSCurrentInputPointerPosition, (void *)&originalCGSCurrentInputPointerPosition}}, 1);
+    NSLog(@"forceFullDesktopBar: starting interception");
+    GumInterceptor * interceptor;
     
-    if (result != 0) {
-        NSLog(@"forceFullDesktopBar error: rebind_symbols failed with result: %d ... cannot proceed", result);
+    gum_init_embedded();
+    interceptor = gum_interceptor_obtain();
+    
+    if (!interceptor) {
+        NSLog(@"forceFullDesktopBar error: gum_interceptor_obtain failed ... cannot proceed");
         return;
     }
+    
+    gum_interceptor_begin_transaction(interceptor);
+    
+    GumReplaceReturn result = gum_interceptor_replace(interceptor, (gpointer) gum_module_find_export_by_name (NULL, "CGSCurrentInputPointerPosition"), overrideCGSCurrentInputPointerPosition, NULL);
+    
+    if (result != GUM_REPLACE_OK) {
+        NSLog(@"forceFullDesktopBar error: gum_interceptor_replace failed with result: %d ... cannot proceed", result);
+        return;
+    }
+    
+    gum_interceptor_end_transaction (interceptor);
     
     NSLog(@"forceFullDesktopBar: successfully rebound CGSCurrentInputPointerPosition symbol");
 }
 
-__attribute__((constructor)) void install()
+__attribute__((constructor)) static void install() 
 {
     NSLog(@"forceFullDesktopBar: dockInjection installed and running");
     
-	NSInteger osxMajorVersion = NSProcessInfo.processInfo.operatingSystemVersion.majorVersion;
-	NSInteger osxMinorVersion = [[NSProcessInfo processInfo] operatingSystemVersion].minorVersion;
+    NSInteger osxMajorVersion = NSProcessInfo.processInfo.operatingSystemVersion.majorVersion;
+    NSInteger osxMinorVersion = [[NSProcessInfo processInfo] operatingSystemVersion].minorVersion;
     
     @autoreleasepool {
         if (osxMajorVersion == 10 && osxMinorVersion == 11) {

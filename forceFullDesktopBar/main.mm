@@ -8,10 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "processes.h"
-#include "injector.h"
+#import "injector.h"
 
 #define kInjectionDylibFileName "dockInjection.dylib"
-#define kBootstrapDylibFileName "bootstrap.dylib"
 #define kDockInjectionSafetyBufferDuration 7.0
 
 @interface Worker : NSObject
@@ -62,15 +61,10 @@
     return [self getDylibPath:@(kInjectionDylibFileName)];
 }
 
-- (NSString *)getBootstrapDylibPath
-{
-    return [self getDylibPath:@(kBootstrapDylibFileName)];
-}
-
 - (void)injectIntoProcess:(NSNumber *)pidObj
 {
-    if (![self getInjectionDylibPath] || ![self getBootstrapDylibPath]) {
-        NSLog(@"Error: cannot find necessary dylibs");
+    if (![self getInjectionDylibPath]) {
+        NSLog(@"Error: cannot find dockInjection.dylib");
         return;
     }
     
@@ -83,8 +77,12 @@
     }
     
     pid_t pid = pidObj.intValue;
-    Injector inj([[self getBootstrapDylibPath] UTF8String]);
-    inj.inject(pid, [[self getInjectionDylibPath] UTF8String]);
+    bool success = inject(pid, [self getInjectionDylibPath]);
+    
+    if (!success) {
+        NSLog(@"Failed to inject into Dock");
+        return;
+    }
     
     lastInjectionTimestamp = currentTimestamp;
 }
@@ -135,12 +133,6 @@
         return false;
     }
     
-    if (![self getBootstrapDylibPath]) {
-        fprintf(stderr, "Error: cannot find %s\n", kBootstrapDylibFileName);
-        fprintf(stderr, "This file must either be in the current directory or located in:\n/usr/local/forceFullDesktopBar/\n");
-        return false;
-    }
-    
     return true;
 }
 
@@ -148,6 +140,7 @@
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
+        printf("forceFullDestkopBar v1.2\n");
         Worker *worker;
         NSArray *arguments = [[NSProcessInfo processInfo] arguments];
         
