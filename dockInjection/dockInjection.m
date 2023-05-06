@@ -170,7 +170,7 @@ void macOS10_13AndLaterMethod()
     
     gum_interceptor_begin_transaction(interceptor);
     
-    GumReplaceReturn result = gum_interceptor_replace(interceptor, (gpointer) gum_module_find_export_by_name (NULL, "CGSCurrentInputPointerPosition"), overrideCGSCurrentInputPointerPosition, NULL);
+    GumReplaceReturn result = gum_interceptor_replace(interceptor, (gpointer) gum_module_find_export_by_name (NULL, "CGSCurrentInputPointerPosition"), overrideCGSCurrentInputPointerPosition, NULL, NULL);
     
     if (result != GUM_REPLACE_OK) {
         NSLog(@"forceFullDesktopBar error: gum_interceptor_replace failed with result: %d ... cannot proceed", result);

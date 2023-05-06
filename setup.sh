@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FRIDA_VERSON=15.1.7
+FRIDA_VERSON=16.0.19
 
 mkdir -p temp
 cd temp
