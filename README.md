@@ -72,7 +72,7 @@ forceFullDesktopBar requires dockInjection.dylib in order to work. It will first
 
 As of version 1.2, forceFullDesktopBar uses Frida to do its code injection and function swapping, as its the only library I've found that can do so on Apple Silicon systems. However, Frida is a very heavy-weight library and isn't intended just for simple cases of code injection and function swapping. Consequently Frida's static libraries are too large to include in a GitHub repository, especially when combined together into a fat library, as required by Xcode.
 
-So to build forceFullDesktopBar, first run the bash script named `setup.sh` with the current directory at the root of the project. It will automatically fetch the needed archives from Frida's releases on GitHub, extract the needed static libraries, combine them into fat x86_64 / arm64e libraries, and move them into the right places in the project hierarchy. The script is currently set to download Frida 16.0.19 as that is the latest release as of the time of this writing, but newer releases will probably work too.
+So to build forceFullDesktopBar, first run the bash script named `setup.sh` with the current directory at the root of the project. It will automatically fetch the needed archives from Frida's releases on GitHub, extract the needed static libraries, combine them into fat x86_64 / arm64e libraries, and move them into the right places in the project hierarchy. The script is currently set to download Frida 16.6.6 as that is the latest release as of the time of this writing, but newer releases will probably work too.
 
 Afterwards, open the Xcode project and build the ""Copy to install folder" target. You should now be set up to follow the above installation instructions.
 
