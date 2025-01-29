@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FRIDA_VERSON=16.0.19
+FRIDA_VERSON=16.6.6
 
 mkdir -p temp
 cd temp
@@ -94,6 +94,34 @@ if ! test -f "libfrida-gum-x86_64-arm64e.a"; then
 fi
 
 mv libfrida-gum-x86_64-arm64e.a ../dockInjection/
+
+
+echo "Extracting frida-core.h..."
+tar xf frida-core-arm64e.xz frida-core.h
+
+if ! test -f "frida-core.h"; then
+    echo Failed to extract frida-core.h
+    exit 1
+fi
+
+rm -rf ../forceFullDesktopBar/frida-core.h
+mv frida-core.h ../forceFullDesktopBar/frida-core.h
+
+
+echo "Extracting frida-gum.h..."
+tar xf frida-gum-arm64e.xz frida-gum.h
+
+if ! test -f "frida-gum.h"; then
+    echo Failed to extract frida-gum.h
+    exit 1
+fi
+
+rm -rf ../dockInjection/frida-gum.h
+mv frida-gum.h ../dockInjection/frida-gum.h
+# Need to replace these lines otherwise we get compiler errors
+# due to conflicting definition of bpf_insn:
+sed -i '' '/^typedef enum bpf_insn {$/s//typedef enum bpf_insn2 {/' ../dockInjection/frida-gum.h
+sed -i '' '/^} bpf_insn;$/s//} bpf_insn2;/' ../dockInjection/frida-gum.h
 
 echo "Cleaning up..."
 

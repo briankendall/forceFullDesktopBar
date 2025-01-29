@@ -69,32 +69,45 @@ static bool isDoubleTapEvent(CGEventType type, CGGesturePhase phase, uint64_t di
     return type == dockSwipeEvent && phase == kCGGesturePhaseNone && direction == kIOHIDGestureMotionDoubleTap;
 }
 
-static void swizzle_handleEvent(id self, SEL _cmd, CGEventRef event)
+static void checkDockEvent(CGEventRef event)
 {
-    if (event) {
-        CGEventType type = CGEventGetType(event);
-        CGGesturePhase phase = (CGGesturePhase)CGEventGetIntegerValueField(event, dockSwipeGestureMotion);
-        uint64_t direction = (CGGesturePhase)CGEventGetIntegerValueField(event, dockSwipeGesturePhase);
-        
-        if (isStartOfTrackpadSwipeUpEvent(type, phase, direction)) {
-#ifdef VERBOSE
-            NSLog(@"forceFullDesktopBar: Caught beginning of vertical swipe, will override pointer position");
-#endif
-            mouseOverrideCount = 2;
-
-        } else if (isDoubleTapEvent(type, phase, direction)) {
-#ifdef VERBOSE
-            NSLog(@"forceFullDesktopBar: Caught magic mouse double tap, will override pointer position");
-#endif
-            mouseOverrideCount = 2;
-        }
+    if (!event) {
+        return;
     }
     
+    CGEventType type = CGEventGetType(event);
+    CGGesturePhase phase = (CGGesturePhase)CGEventGetIntegerValueField(event, dockSwipeGestureMotion);
+    uint64_t direction = (CGGesturePhase)CGEventGetIntegerValueField(event, dockSwipeGesturePhase);
+    
+    if (isStartOfTrackpadSwipeUpEvent(type, phase, direction)) {
+#ifdef VERBOSE
+        NSLog(@"forceFullDesktopBar: Caught beginning of vertical swipe, will override pointer position");
+#endif
+        mouseOverrideCount = 2;
+
+    } else if (isDoubleTapEvent(type, phase, direction)) {
+#ifdef VERBOSE
+        NSLog(@"forceFullDesktopBar: Caught magic mouse double tap, will override pointer position");
+#endif
+        mouseOverrideCount = 2;
+    }
+}
+
+static void swizzle_handleEvent(id self, SEL _cmd, CGEventRef event)
+{
+    checkDockEvent(event);
     void (*originalFunction)(id, SEL, CGEventRef) = (void (*)(id, SEL, CGEventRef))originalHandleEvent;
     originalFunction(self, _cmd, event);
 }
 
-static CGPoint overrideCGSCurrentInputPointerPosition()
+static void swizzle_handleEventWithType(id self, SEL _cmd, CGEventRef event, CGEventType type)
+{
+    checkDockEvent(event);
+    void (*originalFunction)(id, SEL, CGEventRef, CGEventType) = (void (*)(id, SEL, CGEventRef, CGEventType))originalHandleEvent;
+    originalFunction(self, _cmd, event, type);
+}
+
+static CGPoint overrideCGSCurrentInputPointerPosition(void)
 {
     CGPoint result = CGSCurrentInputPointerPosition();
     
@@ -114,14 +127,14 @@ bool swizzleMethod(NSString *className, SEL orig, IMP newMethod, IMP *originalFu
     id targetClass = NSClassFromString(className);
     
     if (!targetClass) {
-        NSLog(@"forceFullDesktopBar error: Unable to find %@ class... cannot proceed", className);
+        NSLog(@"forceFullDesktopBar error: Unable to find %@ class", className);
         return false;
     }
     
     Method origMethod = class_getInstanceMethod(targetClass, orig);
     
     if (!origMethod) {
-        NSLog(@"forceFullDesktopBar error: Unable to find target method in %@ class... cannot proceed", className);
+        NSLog(@"forceFullDesktopBar error: Unable to find target method in %@ class", className);
         return false;
     }
     
@@ -132,7 +145,7 @@ bool swizzleMethod(NSString *className, SEL orig, IMP newMethod, IMP *originalFu
     return true;
 }
 
-void macOS10_11Method()
+void macOS10_11Method(void)
 {
     swizzleMethod(@"WVExpose",
                   @selector(_missionControlSetupSpacesStripControllerForDisplay:showFullBar:),
@@ -140,20 +153,56 @@ void macOS10_11Method()
                   &originalMissionControlSetupSpacesStripControllerForDisplay);
 }
 
-void macOS10_13AndLaterMethod()
-{    
+bool swizzleWVExposeMethod(void)
+{
     bool success = swizzleMethod(@"_TtC4Dock8WVExpose", @selector(changeMode:), (IMP)swizzle_changeMode,
                                  &originalChangeMode);
-    if (!success) {
+    if (success) {
+        return true;
+    }
+    
+    NSLog(@"forceFullDesktopBar: _TtC4Dock8WVExpose class not found, trying another...");
+    
+    success = swizzleMethod(@"WVExpose", @selector(changeMode:), (IMP)swizzle_changeMode, &originalChangeMode);
+    
+    if (success) {
+        return true;
+    }
+    
+    NSLog(@"forceFullDesktopBar: unable to swizzle WVExpose method, cannot proceed.");
+    
+    return false;
+}
+
+bool swizzleDOCKGesturesMethod(void)
+{
+    bool success = swizzleMethod(@"DOCKGestures", @selector(handleEvent:), (IMP)swizzle_handleEvent,
+                                 &originalHandleEvent);
+    
+    if (success) {
+        return true;
+    }
+    
+    NSLog(@"forceFullDesktopBar: unable to swizzle [DOCKGestures handleEvent:], trying another");
+    
+    success = swizzleMethod(@"DOCKGestures", @selector(handleEvent:type:), (IMP)swizzle_handleEventWithType,
+                            &originalHandleEvent);
+    
+    if (success) {
+        return true;
+    }
+    
+    NSLog(@"forceFullDesktopBar: unable to swizzle DOCKGestures method, cannot proceed.");
+    return false;
+}
+
+void macOS10_13AndLaterMethod(void)
+{
+    if (!swizzleWVExposeMethod()) {
         return;
     }
     
-    success = swizzleMethod(@"DOCKGestures",
-                            @selector(handleEvent:),
-                            (IMP)swizzle_handleEvent,
-                            &originalHandleEvent);
-    
-    if (!success) {
+    if (!swizzleDOCKGesturesMethod()) {
         return;
     }
     
@@ -170,7 +219,27 @@ void macOS10_13AndLaterMethod()
     
     gum_interceptor_begin_transaction(interceptor);
     
-    GumReplaceReturn result = gum_interceptor_replace(interceptor, (gpointer) gum_module_find_export_by_name (NULL, "CGSCurrentInputPointerPosition"), overrideCGSCurrentInputPointerPosition, NULL, NULL);
+    GError *error = nil;
+    GumModule *module = gum_module_load("/System/Library/CoreServices/Dock.app/Contents/MacOS/Dock", &error);
+    
+    if (!module || error) {
+        NSLog(@"forceFullDesktopBar error: gum_module_load failed ... cannot proceed");
+        
+        if (error && error->message) {
+            NSLog(@"forceFullDesktopBar error message: %s", error->message);
+        }
+        
+        return;
+    }
+     
+    GumAddress funcAddr = gum_module_find_export_by_name (module, "CGSCurrentInputPointerPosition");
+    
+    if (!funcAddr) {
+        NSLog(@"forceFullDesktopBar error: gum_module_find_export_by_name failed ... cannot proceed");
+        return;
+    }
+    
+    GumReplaceReturn result = gum_interceptor_replace(interceptor, (gpointer) funcAddr, overrideCGSCurrentInputPointerPosition, NULL, NULL);
     
     if (result != GUM_REPLACE_OK) {
         NSLog(@"forceFullDesktopBar error: gum_interceptor_replace failed with result: %d ... cannot proceed", result);
@@ -182,7 +251,7 @@ void macOS10_13AndLaterMethod()
     NSLog(@"forceFullDesktopBar: successfully rebound CGSCurrentInputPointerPosition symbol");
 }
 
-__attribute__((constructor)) static void install() 
+__attribute__((constructor)) static void install(void) 
 {
     NSLog(@"forceFullDesktopBar: dockInjection installed and running");
     

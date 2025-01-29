@@ -11,7 +11,6 @@
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 7755D76D216ABFEC007541A4 /* Build configuration list for PBXAggregateTarget "Copy to install folder" */;
 			buildPhases = (
-				7755D776216ABFF6007541A4 /* CopyFiles */,
 			);
 			dependencies = (
 				7755D771216ABFF2007541A4 /* PBXTargetDependency */,
@@ -23,8 +22,9 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		7755D777216AC002007541A4 /* forceFullDesktopBar in CopyFiles */ = {isa = PBXBuildFile; fileRef = 775D43651BCC256D002EDD8A /* forceFullDesktopBar */; };
-		7755D778216AC004007541A4 /* dockInjection.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 775D43731BCC25E0002EDD8A /* dockInjection.dylib */; };
+		770F348B2D497EEE002947E8 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 770F348A2D497EEE002947E8 /* IOKit.framework */; };
+		770F348D2D497EF8002947E8 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 770F348C2D497EF8002947E8 /* Security.framework */; };
+		770F348F2D498776002947E8 /* frida-gum.h in Headers */ = {isa = PBXBuildFile; fileRef = 770F348E2D498776002947E8 /* frida-gum.h */; };
 		775D43691BCC256D002EDD8A /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 775D43681BCC256D002EDD8A /* main.mm */; };
 		775D43781BCC25E0002EDD8A /* dockInjection.m in Sources */ = {isa = PBXBuildFile; fileRef = 775D43771BCC25E0002EDD8A /* dockInjection.m */; };
 		775D43861BCC2CB7002EDD8A /* injector.mm in Sources */ = {isa = PBXBuildFile; fileRef = 775D43821BCC2CB7002EDD8A /* injector.mm */; };
@@ -63,17 +63,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		7755D776216ABFF6007541A4 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "$(PROJECT_DIR)/install";
-			dstSubfolderSpec = 0;
-			files = (
-				7755D777216AC002007541A4 /* forceFullDesktopBar in CopyFiles */,
-				7755D778216AC004007541A4 /* dockInjection.dylib in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		775D43631BCC256D002EDD8A /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -86,6 +75,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		770F348A2D497EEE002947E8 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		770F348C2D497EF8002947E8 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		770F348E2D498776002947E8 /* frida-gum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "frida-gum.h"; sourceTree = "<group>"; };
 		775D43651BCC256D002EDD8A /* forceFullDesktopBar */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = forceFullDesktopBar; sourceTree = BUILT_PRODUCTS_DIR; };
 		775D43681BCC256D002EDD8A /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		775D43731BCC25E0002EDD8A /* dockInjection.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = dockInjection.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -112,6 +104,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				770F348D2D497EF8002947E8 /* Security.framework in Frameworks */,
+				770F348B2D497EEE002947E8 /* IOKit.framework in Frameworks */,
 				77D67337272714390057E3FD /* libfrida-core-x86_64-arm64e.a in Frameworks */,
 				77D67335272712AA0057E3FD /* libbsm.tbd in Frameworks */,
 				77D67333272712980057E3FD /* libresolv.tbd in Frameworks */,
@@ -170,6 +164,7 @@
 		775D43741BCC25E0002EDD8A /* dockInjection */ = {
 			isa = PBXGroup;
 			children = (
+				770F348E2D498776002947E8 /* frida-gum.h */,
 				775D43771BCC25E0002EDD8A /* dockInjection.m */,
 				77D6733A2727286E0057E3FD /* libfrida-gum-x86_64-arm64e.a */,
 			);
@@ -179,6 +174,8 @@
 		77D6731F272705E40057E3FD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				770F348C2D497EF8002947E8 /* Security.framework */,
+				770F348A2D497EEE002947E8 /* IOKit.framework */,
 				77D67330272712090057E3FD /* libbsm.tbd */,
 				77D6732E272711F60057E3FD /* libm.tbd */,
 				77D6732C272711E60057E3FD /* libdl.tbd */,
@@ -196,6 +193,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				770F348F2D498776002947E8 /* frida-gum.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -386,7 +384,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
@@ -425,7 +423,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -436,7 +434,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 			};
@@ -445,6 +443,7 @@
 		775D436D1BCC256D002EDD8A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/dockInjection",
@@ -457,6 +456,7 @@
 		775D436E1BCC256D002EDD8A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/dockInjection",
